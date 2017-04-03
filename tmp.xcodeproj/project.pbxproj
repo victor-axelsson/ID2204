@@ -12,8 +12,8 @@
 		31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C361E8A65F00054C762 /* SendMoreMoney.cpp */; };
 		31CF9C3B1E8A7BF70054C762 /* SendMostMoney.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C391E8A7BF60054C762 /* SendMostMoney.cpp */; };
 		31CF9C3F1E8A86420054C762 /* SendMostMoneyScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C3D1E8A86420054C762 /* SendMostMoneyScript.cpp */; };
-		31E28D631E9296470094FCA8 /* A1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D621E9296470094FCA8 /* A1.cpp */; };
 		31E28D671E9298340094FCA8 /* Sudoku.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D661E9298340094FCA8 /* Sudoku.cpp */; };
+		31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D6B1E92A0B70094FCA8 /* A1.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,8 +39,8 @@
 		31CF9C3A1E8A7BF60054C762 /* SendMostMoney.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SendMostMoney.hpp; sourceTree = "<group>"; };
 		31CF9C3D1E8A86420054C762 /* SendMostMoneyScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendMostMoneyScript.cpp; sourceTree = "<group>"; };
 		31CF9C3E1E8A86420054C762 /* SendMostMoneyScript.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SendMostMoneyScript.hpp; sourceTree = "<group>"; };
-		31E28D621E9296470094FCA8 /* A1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = A1.cpp; path = ../../../../Downloads/A1.cpp; sourceTree = "<group>"; };
 		31E28D661E9298340094FCA8 /* Sudoku.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sudoku.cpp; sourceTree = "<group>"; };
+		31E28D6B1E92A0B70094FCA8 /* A1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = A1.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +83,8 @@
 				31CF9C3A1E8A7BF60054C762 /* SendMostMoney.hpp */,
 				31CF9C3D1E8A86420054C762 /* SendMostMoneyScript.cpp */,
 				31CF9C3E1E8A86420054C762 /* SendMostMoneyScript.hpp */,
-				31E28D621E9296470094FCA8 /* A1.cpp */,
 				31E28D661E9298340094FCA8 /* Sudoku.cpp */,
+				31E28D6B1E92A0B70094FCA8 /* A1.cpp */,
 			);
 			path = tmp;
 			sourceTree = "<group>";
@@ -145,12 +145,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31E28D631E9296470094FCA8 /* A1.cpp in Sources */,
 				31CF9C3B1E8A7BF70054C762 /* SendMostMoney.cpp in Sources */,
 				31CF9C2B1E8A629F0054C762 /* main.cpp in Sources */,
 				31CF9C3F1E8A86420054C762 /* SendMostMoneyScript.cpp in Sources */,
 				31E28D671E9298340094FCA8 /* Sudoku.cpp in Sources */,
 				31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */,
+				31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

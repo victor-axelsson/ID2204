@@ -32,6 +32,7 @@ int main(int argc, char * argv[]) {
     }
      */
     
+    
     Sudoku* m = new Sudoku;
     Gecode::DFS<Sudoku> e(m);
     delete m;
@@ -40,7 +41,6 @@ int main(int argc, char * argv[]) {
         s->print();
         delete s;
     }
-    
 
     
     /*
