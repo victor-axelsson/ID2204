@@ -22,11 +22,13 @@ protected:
     IntVar money;
 public:
     SendMostMoney(void) : l(*this, 8, 0, 9), money(*this, 0, 100000){
+        
         IntVar s(l[0]), e(l[1]), n(l[2]), d(l[3]), m(l[4]), o(l[5]), t(l[6]), y(l[7]);
         
         rel(*this, s != 0);
         rel(*this, m != 0);
         distinct(*this, l);
+        
         rel(*this, 1000*s + 100*e + 10*n + d + 1000*m + 100*o + 10*s + t == 10000*m + 1000*o + 100*n + 10*e + y);
         rel(*this, money == 10000*m + 1000*o + 100*n + 10*e + y);
         

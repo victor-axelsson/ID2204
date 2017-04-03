@@ -1,13 +1,13 @@
 //
-//  SendMoreMoney.hpp
+//  Sudoku.cpp
 //  tmp
 //
-//  Created by Victor Axelsson on 2017-03-28.
+//  Created by Victor Axelsson on 2017-04-03.
 //  Copyright © 2017 simple_solutions. All rights reserved.
 //
 
-#ifndef SendMoreMoney_hpp
-#define SendMoreMoney_hpp
+#include <stdio.h>
+
 
 #include <stdio.h>
 #include <gecode/int.hh>
@@ -16,11 +16,11 @@
 using namespace Gecode;
 
 
-class SendMoreMoney : public Space {
+class Sudoku : public Space {
 protected:
     IntVarArray l;
 public:
-    SendMoreMoney(void) : l(*this, 8, 0, 9) {
+    Sudoku(void) : l(*this, 8, 0, 9) {
         IntVar s(l[0]), e(l[1]), n(l[2]), d(l[3]), m(l[4]), o(l[5]), r(l[6]), y(l[7]);
         
         rel(*this, s, IRT_NQ, 0);
@@ -68,12 +68,12 @@ public:
         branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     }
     
-    SendMoreMoney(bool share, SendMoreMoney& s) : Space(share, s) {
+    Sudoku(bool share, Sudoku& s) : Space(share, s) {
         l.update(*this, share, s.l);
     }
     
     virtual Space* copy(bool share) {
-        return new SendMoreMoney(share, *this);
+        return new Sudoku(share, *this);
     }
     
     void print(std::ostream& os) const {
@@ -84,5 +84,3 @@ public:
         std::cout << l << std::endl;
     }
 };
-
-#endif /* SendMoreMoney_hpp */

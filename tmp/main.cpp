@@ -12,10 +12,14 @@
 #include <gecode/gist.hh>
 #include "SendMoreMoney.hpp"
 #include "SendMostMoney.hpp"
+#include "Sudoku.cpp"
+#include "SendMostMoneyScript.hpp"
+#include <gecode/driver.hh>
+#include <gecode/int.hh>
+#include <gecode/minimodel.hh>
 
 
-
-int main(int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
     
     /*
     SendMoreMoney* m = new SendMoreMoney;
@@ -23,10 +27,23 @@ int main(int argc, const char * argv[]) {
     delete m;
     
     while (SendMoreMoney* s = e.next()) {
-        s->print(); delete s;
+        s->print();
+        delete s;
     }
      */
     
+    Sudoku* m = new Sudoku;
+    Gecode::DFS<Sudoku> e(m);
+    delete m;
+    
+    while (Sudoku* s = e.next()) {
+        s->print();
+        delete s;
+    }
+    
+
+    
+    /*
     SendMostMoney* m = new SendMostMoney;
     Gecode::BAB<SendMostMoney> e(m);
     delete m;
@@ -37,6 +54,17 @@ int main(int argc, const char * argv[]) {
     }
     
     
+    // commandline options
+    Options opt("SEND + MOST = MONEY");
+    opt.model(SendMostMoneyScript::MODEL_SINGLE, "single", "use single linear equation");
+    opt.model(SendMostMoneyScript::MODEL_CARRY, "carry", "use carry");
+    opt.model(SendMostMoneyScript::MODEL_SINGLE);
+    opt.solutions(0);
+    opt.parse(argc, argv);
+    // run script
+    Script::run<SendMostMoneyScript,BAB,Options>(opt);
+    */
+    
     /*
     SendMoreMoney* m = new SendMoreMoney;
     Gist::Print<SendMoreMoney> p("Print solution");
@@ -45,6 +73,7 @@ int main(int argc, const char * argv[]) {
     Gist::dfs(m,o);
     delete m;
      */
+    
     
     
     return 0;
