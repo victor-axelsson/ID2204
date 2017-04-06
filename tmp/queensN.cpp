@@ -14,7 +14,7 @@
 using namespace Gecode;
 using namespace std;
 
-const int CHESSBOARD_SIZE = 4;
+const int CHESSBOARD_SIZE = 6;
 
 class QueensN : public Space {
 protected:
@@ -44,21 +44,16 @@ public:
 			int col = 0;
 			IntVarArgs diag;
 			while (row < CHESSBOARD_SIZE && col < CHESSBOARD_SIZE) {
-
-				cout << row << ' ' << col << ' ';
 				diag << l[row * CHESSBOARD_SIZE + col];
 				row++;
 				col++;
 			}
-			cout << endl;
-			cout << diag << endl;
 			if (diag.size() > 1) {
 				IntArgs k(diag.size());
 				for (int s = 0; s < diag.size(); s++) {
 					k[s] = 1;
 				}
-				cout << k << endl;
-				linear(*this, k, diag, IRT_EQ, 1);
+				linear(*this, k, diag, IRT_LQ, 1);
 			}
 		}
 
@@ -67,10 +62,28 @@ public:
 			int row = 0;
 			IntVarArgs diag;
 			while (row < CHESSBOARD_SIZE && col < CHESSBOARD_SIZE) {
-				cout << row << ' ' << col << ' ';
 				diag << l[row * CHESSBOARD_SIZE + col];
 				row++;
 				col++;
+			}
+			if (diag.size() > 1) {
+				IntArgs k(diag.size());
+				for (int s = 0; s < diag.size(); s++) {
+					k[s] = 1;
+				}
+				linear(*this, k, diag, IRT_LQ, 1);
+			}
+		}
+		
+		for (int i = 0; i < CHESSBOARD_SIZE; i++) {
+			int col = CHESSBOARD_SIZE - 1;
+			int row = i;
+			IntVarArgs diag;
+			while (row < CHESSBOARD_SIZE && col >= 0) {
+				cout << row << ' ' << col << ' ';
+				diag << l[row * CHESSBOARD_SIZE + col];
+				row++;
+				col--;
 			}
 			cout << endl;
 			cout << diag << endl;
@@ -80,46 +93,31 @@ public:
 					k[s] = 1;
 				}
 				cout << k << endl;
-				linear(*this, k, diag, IRT_EQ, 1);
+				linear(*this, k, diag, IRT_LQ, 1);
 			}
 		}
-
-		/*
-		for (int i = 1; i < CHESSBOARD_SIZE; i++) {
-			int col = CHESSBOARD_SIZE;
+		for (int i = CHESSBOARD_SIZE - 2; i >= 0; i--) {
 			int row = 0;
+			int col = i;
 			IntVarArgs diag;
-			while (row < CHESSBOARD_SIZE && col < CHESSBOARD_SIZE) {
+			while (row < CHESSBOARD_SIZE && col >= 0) {
+				cout << row << ' ' << col << ' ';
 				diag << l[row * CHESSBOARD_SIZE + col];
 				row++;
 				col--;
 			}
+			cout << endl;
+			cout << diag << endl;
 			if (diag.size() > 1) {
 				IntArgs k(diag.size());
 				for (int s = 0; s < diag.size(); s++) {
 					k[s] = 1;
 				}
-				linear(*this, k, diag, IRT_EQ, 1);
+				cout << k << endl;
+				linear(*this, k, diag, IRT_LQ, 1);
 			}
 		}
-		for (int i = 0; i < CHESSBOARD_SIZE; i++) {
-			int row = 0;
-			int col = CHESSBOARD_SIZE - 1;
-			IntVarArgs diag;
-			while (row < CHESSBOARD_SIZE && col < CHESSBOARD_SIZE) {
-				diag << l[row * CHESSBOARD_SIZE + col];
-				row++;
-				col--;
-			}
-			if (diag.size() > 1) {
-				IntArgs k(diag.size());
-				for (int s = 0; s < diag.size(); s++) {
-					k[s] = 1;
-				}
-				linear(*this, k, diag, IRT_EQ, 1);
-			}
-		}
-		*/
+		
 
 
 		branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
