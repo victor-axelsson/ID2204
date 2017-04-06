@@ -80,19 +80,15 @@ public:
 			int row = i;
 			IntVarArgs diag;
 			while (row < CHESSBOARD_SIZE && col >= 0) {
-				cout << row << ' ' << col << ' ';
 				diag << l[row * CHESSBOARD_SIZE + col];
 				row++;
 				col--;
 			}
-			cout << endl;
-			cout << diag << endl;
 			if (diag.size() > 1) {
 				IntArgs k(diag.size());
 				for (int s = 0; s < diag.size(); s++) {
 					k[s] = 1;
 				}
-				cout << k << endl;
 				linear(*this, k, diag, IRT_LQ, 1);
 			}
 		}
@@ -101,24 +97,18 @@ public:
 			int col = i;
 			IntVarArgs diag;
 			while (row < CHESSBOARD_SIZE && col >= 0) {
-				cout << row << ' ' << col << ' ';
 				diag << l[row * CHESSBOARD_SIZE + col];
 				row++;
 				col--;
 			}
-			cout << endl;
-			cout << diag << endl;
 			if (diag.size() > 1) {
 				IntArgs k(diag.size());
 				for (int s = 0; s < diag.size(); s++) {
 					k[s] = 1;
 				}
-				cout << k << endl;
 				linear(*this, k, diag, IRT_LQ, 1);
 			}
 		}
-		
-
 
 		branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 	}
