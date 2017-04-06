@@ -14,6 +14,8 @@
 		31CF9C3F1E8A86420054C762 /* SendMostMoneyScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C3D1E8A86420054C762 /* SendMostMoneyScript.cpp */; };
 		31E28D671E9298340094FCA8 /* Sudoku.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D661E9298340094FCA8 /* Sudoku.cpp */; };
 		31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D6B1E92A0B70094FCA8 /* A1.cpp */; };
+		31E28D701E92C0750094FCA8 /* Fabric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D6F1E92C0750094FCA8 /* Fabric.cpp */; };
+		31E28D721E92C2130094FCA8 /* Examples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D711E92C2130094FCA8 /* Examples.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +43,8 @@
 		31CF9C3E1E8A86420054C762 /* SendMostMoneyScript.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SendMostMoneyScript.hpp; sourceTree = "<group>"; };
 		31E28D661E9298340094FCA8 /* Sudoku.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sudoku.cpp; sourceTree = "<group>"; };
 		31E28D6B1E92A0B70094FCA8 /* A1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = A1.cpp; sourceTree = "<group>"; };
+		31E28D6F1E92C0750094FCA8 /* Fabric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fabric.cpp; sourceTree = "<group>"; };
+		31E28D711E92C2130094FCA8 /* Examples.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Examples.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,8 @@
 				31CF9C3E1E8A86420054C762 /* SendMostMoneyScript.hpp */,
 				31E28D661E9298340094FCA8 /* Sudoku.cpp */,
 				31E28D6B1E92A0B70094FCA8 /* A1.cpp */,
+				31E28D6F1E92C0750094FCA8 /* Fabric.cpp */,
+				31E28D711E92C2130094FCA8 /* Examples.cpp */,
 			);
 			path = tmp;
 			sourceTree = "<group>";
@@ -148,6 +154,8 @@
 				31CF9C3B1E8A7BF70054C762 /* SendMostMoney.cpp in Sources */,
 				31CF9C2B1E8A629F0054C762 /* main.cpp in Sources */,
 				31CF9C3F1E8A86420054C762 /* SendMostMoneyScript.cpp in Sources */,
+				31E28D701E92C0750094FCA8 /* Fabric.cpp in Sources */,
+				31E28D721E92C2130094FCA8 /* Examples.cpp in Sources */,
 				31E28D671E9298340094FCA8 /* Sudoku.cpp in Sources */,
 				31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */,
 				31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */,

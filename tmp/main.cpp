@@ -14,6 +14,7 @@
 #include "SendMostMoney.hpp"
 #include "Sudoku.cpp"
 #include "SendMostMoneyScript.hpp"
+#include "Fabric.cpp"
 #include <gecode/driver.hh>
 #include <gecode/int.hh>
 #include <gecode/minimodel.hh>
@@ -32,12 +33,23 @@ int main(int argc, char * argv[]) {
     }
      */
     
-    
+        /*
     Sudoku* m = new Sudoku;
     Gecode::DFS<Sudoku> e(m);
     delete m;
     
     while (Sudoku* s = e.next()) {
+        s->print();
+        delete s;
+    }
+         */
+    
+    
+    Fabric* m = new Fabric(200, 1000);
+    Gecode::BAB<Fabric> e(m);
+    delete m;
+    
+    while (Fabric* s = e.next()) {
         s->print();
         delete s;
     }

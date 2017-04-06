@@ -7,9 +7,6 @@
 //
 
 #include <stdio.h>
-
-
-#include <stdio.h>
 #include <gecode/int.hh>
 #include <gecode/search.hh>
 #include "A1.cpp"
@@ -17,7 +14,7 @@
 using namespace Gecode;
 using namespace std;
 
-const int BOARD_INSTANCE = 1;
+const int BOARD_INSTANCE = 2;
 const int BOARD_SIZE = 9;
 
 class Sudoku : public Space {
@@ -130,20 +127,18 @@ public:
         return new Sudoku(share, *this);
     }
 
-    /*
-    void print(std::ostream& os) const {
-        os << l << std::endl;
-    }
-    */
-    
     void print(void) const {
-        
-        cout << "-------------------------" <<endl;
         for(int i = 0; i < BOARD_SIZE * BOARD_SIZE; i+= BOARD_SIZE){
+            if(i % 27 == 0){
+                cout << "-------------------------" <<endl;
+            }
+            
             cout << "|" << l[i + 0] << ", " << l[i + 1] << ", " << l[i + 2] << "|" << l[i + 3] << ", " << l[i + 4] << ", " << l[i + 5] << "|" << l[i + 6]<< ", "  << l[i + 7] << ", " << l[i + 8] << "|" <<endl;
-            cout << "-------------------------" <<endl;
             
         }
+        
+        cout << "-------------------------" <<endl;
+        
         
         cout <<endl <<endl;
     }
