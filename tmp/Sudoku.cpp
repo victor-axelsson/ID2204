@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <gecode/int.hh>
 #include <gecode/search.hh>
+#include <gecode/driver.hh>
 #include "A1.cpp"
 
 using namespace Gecode;

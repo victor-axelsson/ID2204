@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		314AB8FA1E9766AB00A369B4 /* queensN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 314AB8F91E9766AB00A369B4 /* queensN.cpp */; };
 		31CF9C2B1E8A629F0054C762 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C2A1E8A629F0054C762 /* main.cpp */; };
 		31CF9C351E8A65350054C762 /* gecode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CF9C341E8A65340054C762 /* gecode.framework */; };
 		31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C361E8A65F00054C762 /* SendMoreMoney.cpp */; };
@@ -16,6 +17,7 @@
 		31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D6B1E92A0B70094FCA8 /* A1.cpp */; };
 		31E28D701E92C0750094FCA8 /* Fabric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D6F1E92C0750094FCA8 /* Fabric.cpp */; };
 		31E28D721E92C2130094FCA8 /* Examples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31E28D711E92C2130094FCA8 /* Examples.cpp */; };
+		31F30C281E96901C00EC5A17 /* queens.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31F30C271E96901C00EC5A17 /* queens.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		314AB8F91E9766AB00A369B4 /* queensN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queensN.cpp; sourceTree = "<group>"; };
 		31CF9C271E8A629F0054C762 /* tmp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tmp; sourceTree = BUILT_PRODUCTS_DIR; };
 		31CF9C2A1E8A629F0054C762 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		31CF9C311E8A62E30054C762 /* gecode-5.0.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "gecode-5.0.0"; path = "../../../Downloads/gecode-5.0.0"; sourceTree = "<group>"; };
@@ -45,6 +48,7 @@
 		31E28D6B1E92A0B70094FCA8 /* A1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = A1.cpp; sourceTree = "<group>"; };
 		31E28D6F1E92C0750094FCA8 /* Fabric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fabric.cpp; sourceTree = "<group>"; };
 		31E28D711E92C2130094FCA8 /* Examples.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Examples.cpp; sourceTree = "<group>"; };
+		31F30C271E96901C00EC5A17 /* queens.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queens.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,7 @@
 		31CF9C291E8A629F0054C762 /* tmp */ = {
 			isa = PBXGroup;
 			children = (
+				314AB8F91E9766AB00A369B4 /* queensN.cpp */,
 				31CF9C2A1E8A629F0054C762 /* main.cpp */,
 				31CF9C361E8A65F00054C762 /* SendMoreMoney.cpp */,
 				31CF9C371E8A65F00054C762 /* SendMoreMoney.hpp */,
@@ -91,6 +96,7 @@
 				31E28D6B1E92A0B70094FCA8 /* A1.cpp */,
 				31E28D6F1E92C0750094FCA8 /* Fabric.cpp */,
 				31E28D711E92C2130094FCA8 /* Examples.cpp */,
+				31F30C271E96901C00EC5A17 /* queens.cpp */,
 			);
 			path = tmp;
 			sourceTree = "<group>";
@@ -152,6 +158,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				31CF9C3B1E8A7BF70054C762 /* SendMostMoney.cpp in Sources */,
+				314AB8FA1E9766AB00A369B4 /* queensN.cpp in Sources */,
+				31F30C281E96901C00EC5A17 /* queens.cpp in Sources */,
 				31CF9C2B1E8A629F0054C762 /* main.cpp in Sources */,
 				31CF9C3F1E8A86420054C762 /* SendMostMoneyScript.cpp in Sources */,
 				31E28D701E92C0750094FCA8 /* Fabric.cpp in Sources */,
@@ -253,6 +261,7 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				HEADER_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -264,6 +273,7 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				HEADER_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
