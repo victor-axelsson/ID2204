@@ -14,14 +14,15 @@
 using namespace Gecode;
 using namespace std;
 
-const int CHESSBOARD_SIZE = 6;
+const int CHESSBOARD_SIZE = 9;
 
-class QueensN : public Space {
+class QueensN : public Script {
 protected:
 	IntVarArray l;
 
 public:
-	QueensN(void) : l(*this, CHESSBOARD_SIZE * CHESSBOARD_SIZE, 0, 1) {
+	QueensN(const SizeOptions& opt)
+		: Script(opt), l(*this, CHESSBOARD_SIZE * CHESSBOARD_SIZE, 0, 1) {
 
 		Matrix<IntVarArgs> mat(l, CHESSBOARD_SIZE, CHESSBOARD_SIZE);
 		IntArgs c(CHESSBOARD_SIZE);
@@ -110,10 +111,17 @@ public:
 			}
 		}
 
-		branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+		//branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+		branch(*this, l, INT_VAR_MERIT_MIN(&m), INT_VAL_MIN());
+
+		//branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
 	}
 
-	QueensN(bool share, QueensN& s) : Space(share, s) {
+	static double m(const Space& home, IntVar x, int i) {
+		return abs((CHESSBOARD_SIZE / 2) - (i % CHESSBOARD_SIZE));
+	}
+
+	QueensN(bool share, QueensN& s) : Script(share, s) {
 		l.update(*this, share, s.l);
 	}
 
@@ -130,4 +138,17 @@ public:
 			}
 		}
 	}
+
+	/// Print solution
+	virtual void
+		print(std::ostream& os) const {
+		os << "queens\t";
+		for (int i = 0; i < l.size(); i++) {
+			os << l[i] << ", ";
+			if ((i + 1) % 10 == 0)
+				os << std::endl << "\t";
+		}
+		os << std::endl;
+	}
 };
+
