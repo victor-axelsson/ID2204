@@ -23,14 +23,18 @@
 int main(int argc, char * argv[]) {
        
         
-    QueensN* m = new QueensN;
-    Gecode::DFS<QueensN> e(m);
-    delete m;
-    
-    while (QueensN* s = e.next()) {
-        s->print();
-        delete s;
-    }
+    //QueensN* m = new QueensN;
+    //Gecode::DFS<QueensN> e(m);
+    //delete m;
+
+	SizeOptions opt("QueensN");
+	opt.iterations(500);
+	opt.size(100);
+	Script::run<QueensN, DFS, SizeOptions>(opt);
+    //while (QueensN* s = e.next()) {
+    //    s->print();
+    //    delete s;
+    //}
          
     
     
