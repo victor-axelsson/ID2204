@@ -39,32 +39,26 @@ public:
 	enum {
 		ICL_DEF, ICL_VAL, ICL_BND, ICL_DOM
 	}; 
-	void addDistinct(IntVarArgs array, SizeOptions opt, Sudoku& s) {
-		switch (opt.branching()) {
+	void addDistinct(IntVarArgs array, int opt) {
+		switch (opt) {
 		case ICL_DEF:
-			cout << "ICL_DEF" << endl;
-			distinct(s, array, IPL_DEF);
+			distinct(*this, array, IPL_DEF);
 			break;
 
 		case ICL_VAL:
-			cout << "ICL_VAL" << endl;
-			distinct(s, array, IPL_VAL);
+			distinct(*this, array, IPL_VAL);
 			break;
 
 		case ICL_BND:
-			cout << "ICL_VAL" << endl;
-			distinct(s, array, IPL_BND);
+			distinct(*this, array, IPL_BND);
 			break;
 
 		case ICL_DOM:
-			cout << "ICL_DOM" << endl;
-			distinct(s, array, IPL_DOM);
+			distinct(*this, array, IPL_DOM);
 			break;
 
 		default:
-			cout << "Default" << endl;
-			//Default
-			distinct(s, array);
+			distinct(*this, array);
 			break;
 		}
 	};
@@ -76,66 +70,12 @@ public:
         
         //rows
         for (int i = 0; i < BOARD_SIZE; i++) {
-			//addDistinct(l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), opt, *this);
-			switch (opt.branching()) {
-			case ICL_DEF:
-				cout << "ICL_DEF" << endl;
-				distinct(*this, l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), IPL_DEF);
-				break;
-
-			case ICL_VAL:
-				cout << "ICL_VAL" << endl;
-				distinct(*this, l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), IPL_VAL);
-				break;
-
-			case ICL_BND:
-				cout << "ICL_VAL" << endl;
-				distinct(*this, l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), IPL_BND);
-				break;
-
-			case ICL_DOM:
-				cout << "ICL_DOM" << endl;
-				distinct(*this, l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), IPL_DOM);
-				break;
-
-			default:
-				cout << "Default" << endl;
-				//Default
-				distinct(*this, l.slice(i * BOARD_SIZE, 1, BOARD_SIZE));
-				break;
-			}
+			addDistinct(l.slice(i * BOARD_SIZE, 1, BOARD_SIZE), opt.propagation());
         }
          
         //columns
         for (int i = 0; i < BOARD_SIZE; i++) {
-			//addDistinct(l.slice(i, BOARD_SIZE, BOARD_SIZE), opt, *this);
-			switch (opt.branching()) {
-			case ICL_DEF:
-				cout << "ICL_DEF" << endl;
-				distinct(*this, l.slice(i, BOARD_SIZE, BOARD_SIZE), IPL_DEF);
-				break;
-
-			case ICL_VAL:
-				cout << "ICL_VAL" << endl;
-				distinct(*this, l.slice(i, BOARD_SIZE, BOARD_SIZE), IPL_VAL);
-				break;
-
-			case ICL_BND:
-				cout << "ICL_VAL" << endl;
-				distinct(*this, l.slice(i, BOARD_SIZE, BOARD_SIZE), IPL_BND);
-				break;
-
-			case ICL_DOM:
-				cout << "ICL_DOM" << endl;
-				distinct(*this, l.slice(i, BOARD_SIZE, BOARD_SIZE), IPL_DOM);
-				break;
-
-			default:
-				cout << "Default" << endl;
-				//Default
-				distinct(*this, l.slice(i, BOARD_SIZE, BOARD_SIZE));
-				break;
-			}
+			addDistinct(l.slice(i, BOARD_SIZE, BOARD_SIZE), opt.propagation());
         }
         
         //squares
@@ -145,32 +85,7 @@ public:
                 for (int rowNum = 0; rowNum < sqrt(BOARD_SIZE); rowNum++) {
                     square << l.slice(rowNum * BOARD_SIZE + i + j, 1, sqrt(BOARD_SIZE));
                 }
-				//addDistinct(square, opt);
-				switch (opt.branching()) {
-				case ICL_DEF:
-					distinct(*this, square, IPL_DEF);
-					break;
-
-				case ICL_VAL:
-					distinct(*this, square, IPL_VAL);
-					break;
-
-				case ICL_BND:
-					cout << "ICL_VAL" << endl;
-					distinct(*this, square, IPL_BND);
-					break;
-
-				case ICL_DOM:
-					cout << "ICL_DOM" << endl;
-					distinct(*this, square, IPL_DOM);
-					break;
-
-				default:
-					cout << "Default" << endl;
-					//Default
-					distinct(*this, square);
-					break;
-				}
+				addDistinct(square, opt.propagation());
             }
         }
    
@@ -223,17 +138,33 @@ int main(int argc, char* argv[]) {
 	SizeOptions opt("Sudoku");
     Sudoku* m = new Sudoku(opt);
 
+	// propagations 115
+	// nodes 5
+	// failures 2
+
 	//cout << "ICL_DEF" << endl;
-	//opt.branching(Sudoku::ICL_DEF);
+	//opt.propagation(Sudoku::ICL_DEF);
 
-	cout << "ICL_VAL" << endl;
-    opt.branching(Sudoku::ICL_VAL);
+	// propagations 115
+	// nodes 5
+	// failures 2
+	
+	//cout << "ICL_VAL" << endl;
+    //opt.propagation(Sudoku::ICL_VAL);
 
-	//cout << "ICL_BND" << endl;
-    //opt.branching(Sudoku::ICL_BND);
+	// propagations 106
+	// nodes 1
+	// failures 0
+
+	cout << "ICL_BND" << endl;
+    opt.propagation(Sudoku::ICL_BND);
+
+	// propagations 112
+	// nodes 1
+	// failures 0
 
 	//cout << "ICL_DOM" << endl;
-    //opt.branching(Sudoku::ICL_DOM);
+    //opt.propagation(Sudoku::ICL_DOM);
 
 	Script::run<Sudoku, DFS, SizeOptions>(opt);
     return 0;
