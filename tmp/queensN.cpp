@@ -48,7 +48,7 @@ public:
 			linear(*this, c, l.slice(i, CHESSBOARD_SIZE, CHESSBOARD_SIZE), IRT_EQ, 1);
 		}
 
-		//diagonals
+		//diagonals, from top left to bottom right, covers the diagonals from middle to top right side
 		for (int i = 0; i < CHESSBOARD_SIZE; i++) {
 			int row = i;
 			int col = 0;
@@ -59,14 +59,11 @@ public:
 				col++;
 			}
 			if (diag.size() > 1) {
-				IntArgs k(diag.size());
-				for (int s = 0; s < diag.size(); s++) {
-					k[s] = 1;
-				}
-				linear(*this, k, diag, IRT_LQ, 1);
+				linear(*this, buildArrayOfOnes(diag.size()), diag, IRT_LQ, 1);
 			}
 		}
 
+		//diagonals, from top left to bottom right, covers the diagonals from middle (not inclusive) to bottom left side
 		for (int i = 1; i < CHESSBOARD_SIZE; i++) {
 			int col = i;
 			int row = 0;
@@ -77,14 +74,11 @@ public:
 				col++;
 			}
 			if (diag.size() > 1) {
-				IntArgs k(diag.size());
-				for (int s = 0; s < diag.size(); s++) {
-					k[s] = 1;
-				}
-				linear(*this, k, diag, IRT_LQ, 1);
+				linear(*this, buildArrayOfOnes(diag.size()), diag, IRT_LQ, 1);
 			}
 		}
-		
+
+		//diagonals, from bottom right to top left, covers the diagonals from top right side to middle 
 		for (int i = 0; i < CHESSBOARD_SIZE; i++) {
 			int col = CHESSBOARD_SIZE - 1;
 			int row = i;
@@ -95,13 +89,11 @@ public:
 				col--;
 			}
 			if (diag.size() > 1) {
-				IntArgs k(diag.size());
-				for (int s = 0; s < diag.size(); s++) {
-					k[s] = 1;
-				}
-				linear(*this, k, diag, IRT_LQ, 1);
+				linear(*this, buildArrayOfOnes(diag.size()), diag, IRT_LQ, 1);
 			}
 		}
+
+		//diagonals, from bottom right to top left, covers the diagonals from middle (non-inclusive) to top right 
 		for (int i = CHESSBOARD_SIZE - 2; i >= 0; i--) {
 			int row = 0;
 			int col = i;
@@ -112,11 +104,7 @@ public:
 				col--;
 			}
 			if (diag.size() > 1) {
-				IntArgs k(diag.size());
-				for (int s = 0; s < diag.size(); s++) {
-					k[s] = 1;
-				}
-				linear(*this, k, diag, IRT_LQ, 1);
+				linear(*this, buildArrayOfOnes(diag.size()), diag, IRT_LQ, 1);
 			}
 		}
             
@@ -145,6 +133,13 @@ public:
         }
 	}
 
+	static IntArgs buildArrayOfOnes(int size) {
+		IntArgs k(size);
+		for (int s = 0; s < size; s++) {
+			k[s] = 1;
+		}
+		return k;					
+	}
     
 	static double maximizeAttackedSquares(const Space& home, IntVar x, int i) {
         //The ith position
