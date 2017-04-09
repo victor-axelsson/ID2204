@@ -25,7 +25,8 @@ public:
     enum{
         MAXIMIZE_ATTACKED_SQUARES_HEURISTIC,
         KNIGHTS_MOVE_HEURISTIC,
-        NO_HEURISTIC
+        NO_HEURISTIC,
+        RANDOM_BRANCHING
     };
     
     static int prevI;
@@ -120,8 +121,8 @@ public:
 			}
 		}
             
-        //Different branching strategies. Here you can cuse different heuristics in order to speed it up.
-        switch (opt.branching()) {
+        //Different branching strategies. Here you can cause different heuristics and branching techniques
+            switch (opt.branching()) {
             case NO_HEURISTIC:
                 cout << "No heruristics" <<endl;
                 branch(*this, l, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
@@ -129,12 +130,17 @@ public:
                 
             case MAXIMIZE_ATTACKED_SQUARES_HEURISTIC:
                 cout << "Maximizing attacked squares" <<endl;
-                branch(*this, l, INT_VAR_MERIT_MAX(&maximizeAttackedSquares), INT_VAL_MIN());
+                branch(*this, l, INT_VAR_MERIT_MIN(&maximizeAttackedSquares), INT_VAL_MIN());
                 break;
             
             case KNIGHTS_MOVE_HEURISTIC:
                 cout << "Knights move (Not implemented)" <<endl;
-                branch(*this, l, INT_VAR_MERIT_MIN(&knightsMove), INT_VAL_MIN());
+                branch(*this, l, INT_VAR_MERIT_MAX(&knightsMove), INT_VAL_MIN());
+                break;
+                
+            case RANDOM_BRANCHING:
+                cout << "Knights move (Not implemented)" <<endl;
+                branch(*this, l, INT_VAR_RND(0), INT_VAL_MIN());
                 break;
                 
             default:
@@ -150,16 +156,19 @@ public:
         //The ith position
         int r = floor(i / CHESSBOARD_SIZE);
         int c = i % CHESSBOARD_SIZE;
-        
+
+        //This section can be good for debugging purposes, but these values are constant, so we don't need to calc them
         //Calc how many square we are attacking, we want to maximize this
         //int colAttack = c + (CHESSBOARD_SIZE - c) - 1;
         //int rowAttack = r + (CHESSBOARD_SIZE - r) - 1;
-        
+
+        //The number of diagonals we attack on the two diagonals
         int diagonalAttack = min(r, c) + min(CHESSBOARD_SIZE - c - 1, CHESSBOARD_SIZE - r - 1);
+        int otherDiagonal = min(CHESSBOARD_SIZE -1 - r, c) + min (CHESSBOARD_SIZE - 1 -c, r);
         
-        cout<< "i: " << i  << " R: " << r << " C: " << c << " sum:" <<  diagonalAttack <<endl;
+        //cout<< "i: " << i  << " R: " << r << " C: " << c << " sumOne:" <<  diagonalAttack  << " sumTwo: " <<otherDiagonal <<endl;
         
-        return diagonalAttack;
+        return diagonalAttack + otherDiagonal;
     
     }
 
@@ -215,8 +224,11 @@ int main(int argc, char* argv[]) {
     
     SizeOptions opt("QueensN");
     
+    //You can select different branchings, either from the predefined or specifing some other with a merit function
     //opt.branching(QueensN::NO_HEURISTIC);
+    
     opt.branching(QueensN::MAXIMIZE_ATTACKED_SQUARES_HEURISTIC);
+    //opt.branching(QueensN::RANDOM_BRANCHING);
     //opt.branching(QueensN::KNIGHTS_MOVE_HEURISTIC);
     
     
