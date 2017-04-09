@@ -215,6 +215,7 @@ public:
 };
 
 
+/*
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("QueensN");
@@ -222,8 +223,8 @@ int main(int argc, char* argv[]) {
     //You can select different branchings, either from the predefined or specifing some other with a merit function
     //opt.branching(QueensN::NO_HEURISTIC);
     
-    opt.branching(QueensN::MAXIMIZE_ATTACKED_SQUARES_HEURISTIC);
-    //opt.branching(QueensN::RANDOM_BRANCHING);
+    //opt.branching(QueensN::MAXIMIZE_ATTACKED_SQUARES_HEURISTIC);
+    opt.branching(QueensN::RANDOM_BRANCHING);
     //opt.branching(QueensN::KNIGHTS_MOVE_HEURISTIC);
     
     
@@ -232,4 +233,5 @@ int main(int argc, char* argv[]) {
     
     return 0;
 }
+ */
 
