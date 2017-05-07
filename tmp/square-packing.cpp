@@ -39,7 +39,14 @@ protected:
     int maxOfs(){
         //double ceilSqrt = ceil(sqrt(n));
         //return ceil(sqrt(n*(n+1)*(2*n+1)/6)), n*ceilSqrt;
-        return n * 5;
+        //return n + n -1;
+        //return 1000;
+        
+        return n * ceil(sqrt(n));
+    }
+    
+    int minOfs(){
+        return ceil(sqrt(n*(n+1)*(2*n+1)/6));
     }
     
 public:
@@ -49,8 +56,9 @@ public:
 
         x = IntVarArray(*this, opt.size() , 0, opt.size());
         y = IntVarArray(*this, opt.size() , 0, opt.size());
-        s = IntVar(*this, 0, maxOfs());
-
+        //s = IntVar(*this, 0, maxOfs());
+        
+        s = IntVar(*this, minOfs(), maxOfs());
         
         //Make sure the x and y are within the boundries of s
         for(int i = 0; i < n; i++){
@@ -112,9 +120,9 @@ public:
         }
         
         
-        
-        
-        
+        //Remove symmetry
+        rel(*this, x[0] <= (s-n) / 2);
+        rel(*this, y[0] <= x[0]);
         
         
         // Do branching
@@ -173,7 +181,7 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(8);
+    opt.size(7);
     
     
     //You can select different branchings, either from the predefined or specifing some other with a merit function
