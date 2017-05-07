@@ -176,11 +176,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "tmp/square-packing.cpp"
-            timestampString = "515868806.7117"
+            timestampString = "515871102.57907"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "print(std::ostream&amp; os)"
             landmarkType = "7">
          </BreakpointContent>
@@ -192,13 +192,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "tmp/square-packing.cpp"
-            timestampString = "515868167.995693"
+            timestampString = "515871102.57907"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
             landmarkName = "class SquarePacking"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "tmp/square-packing.cpp"
+            timestampString = "515871102.57907"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "copy(bool share)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

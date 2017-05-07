@@ -18,7 +18,6 @@
 using namespace Gecode;
 using namespace std;
 
-
 class SquarePacking :  public Script {
     
 private:
@@ -29,7 +28,6 @@ private:
     }
     
     int startFrom1(){
-        
         //Here we ignore 1x1 you can also ignore 2x2 by returning a 2
         return 1;
     }
@@ -92,13 +90,13 @@ public:
         BRANCHING_BIGGER_SQUARES_FIRST,
         BRANCHING_LEFT_TO_RIGHT,
         BRANCHING_TOP_TO_BOTTOM,
-        BRANCHING_RAND,
-        BRANCHING_CUSTOM
+        BRANCHING_RAND
     };
     
     SquarePacking(const SizeOptions& opt): Script(opt){
-        n = opt.size();
 
+        n = opt.size();
+          
         x = IntVarArray(*this, opt.size() , 0, maxOfs());
         y = IntVarArray(*this, opt.size() , 0, maxOfs());
         //s = IntVar(*this, 0, maxOfs());
@@ -190,7 +188,6 @@ public:
          BRANCHING_BIGGER_SQUARES_FIRST,
          BRANCHING_LEFT_TO_RIGHT,
          BRANCHING_TOP_TO_BOTTOM,
-         BRANCHING_CUSTOM
          BRANCHING_RAND
          */
         if(opt.branching() == BRANCHING_ASSIGN_X_THEN_Y){
@@ -208,11 +205,6 @@ public:
         }else if(opt.branching() == BRANCHING_TOP_TO_BOTTOM){
             branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
             branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-        }else if(opt.branching() == BRANCHING_CUSTOM){
-            
-            //What do we do hereeeeee!!! PLZ
-            
-            
         }else if(opt.branching() == BRANCHING_RAND){
             branch(*this, x, INT_VAR_RND(0), INT_VAL_MIN());
             branch(*this, y, INT_VAR_RND(0), INT_VAL_MIN());
@@ -263,29 +255,20 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(15);
-    opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
+    opt.size(8);
+    opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
     
     /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
     opt.branching(SquarePacking::BRANCHING_BIGGER_SQUARES_FIRST);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
     opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
-    opt.branching(SquarePacking::BRANCHING_CUSTOM);
      opt.branching(SquarePacking::BRANCHING_RAND);
     */
+
     
-    //You can select different branchings, either from the predefined or specifing some other with a merit function
-    //opt.branching(QueensN::NO_HEURISTIC);
-    
-    //opt.branching(QueensN::MAXIMIZE_ATTACKED_SQUARES_HEURISTIC);
-    //opt.branching(QueensN::RANDOM_BRANCHING);
-    //opt.branching(QueensN::KNIGHTS_MOVE_HEURISTIC);
-    
-    
-    Script::run<SquarePacking, DFS, SizeOptions>(opt);
-    
-    
+    Script::run<SquarePacking, BAB, SizeOptions>(opt);
+
     return 0;
 }
 
