@@ -176,11 +176,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "tmp/square-packing.cpp"
-            timestampString = "515865682.316576"
+            timestampString = "515867509.196009"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
             landmarkName = "print(std::ostream&amp; os)"
             landmarkType = "7">
          </BreakpointContent>
@@ -197,8 +197,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "76"
             endingLineNumber = "76"
-            landmarkName = "maxOfs()"
-            landmarkType = "7">
+            landmarkName = "class SquarePacking"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

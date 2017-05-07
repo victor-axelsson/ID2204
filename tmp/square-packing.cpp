@@ -28,6 +28,10 @@ private:
         return n - i;
     }
     
+    int startFrom1(){
+        return 1;
+    }
+    
     int getGaps(int i ){
         
         //Start with the specifica cases
@@ -86,6 +90,15 @@ protected:
     
 public:
 
+    enum{
+        BRANCHING_ASSIGN_X_THEN_Y,
+        BRANCHING_BIGGER_SQUARES_FIRST,
+        BRANCHING_LEFT_TO_RIGHT,
+        BRANCHING_TOP_TO_BOTTOM,
+        BRANCHING_RAND,
+        BRANCHING_CUSTOM
+    };
+    
     SquarePacking(const SizeOptions& opt): Script(opt){
         n = opt.size();
 
@@ -96,7 +109,7 @@ public:
         s = IntVar(*this, minOfs(), maxOfs());
 
         //Make sure the x and y are within the boundries of s
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n - startFrom1(); i++){
             int xW = size(i, n);
             
             rel(*this, x[i], IRT_LQ, LinIntExpr(s - x[i] + xW).post(*this, IPL_VAL));
@@ -105,10 +118,10 @@ public:
         
         
         //No overlap, reification
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n - startFrom1(); i++){
             int iSize = size(i, n);
             
-            for(int z = i + 1; z < n; z++){
+            for(int z = i + 1; z < n - startFrom1(); z++){
                 int zSize = size(z, n);
 
                 
@@ -141,7 +154,7 @@ public:
             BoolVarArray colsMatch(*this, n, 0, 1);
             BoolVarArray rowsMatch(*this, n, 0, 1);
             
-            for (int i=0; i<n; i++){
+            for (int i=0; i < n - startFrom1() ; i++){
                 int iSize = size(i, n);
                 
                 //Apply the domain contstraints for rows and columns
@@ -159,7 +172,7 @@ public:
         rel(*this, y[0] <= x[0]);
         
         //Empty strip dominance
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n - startFrom1(); i++){
             int gap = getGaps(i);
             
             if (size(i, n)<=45 || size(i, n)>=2){
@@ -171,8 +184,41 @@ public:
         // Do branching
         //Apply branching on s first
         branch(*this, s,  INT_VAL_MIN());
-        branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-        branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        
+        /*
+         ***** available branchings *****
+         BRANCHING_ASSIGN_X_THEN_Y,
+         BRANCHING_BIGGER_SQUARES_FIRST,
+         BRANCHING_LEFT_TO_RIGHT,
+         BRANCHING_TOP_TO_BOTTOM,
+         BRANCHING_CUSTOM
+         BRANCHING_RAND
+         */
+        if(opt.branching() == BRANCHING_ASSIGN_X_THEN_Y){
+            branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+            branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        }else if(opt.branching() == BRANCHING_BIGGER_SQUARES_FIRST){
+            for(int i = 0; i < n - startFrom1(); i++){
+                branch(*this, x[i], INT_VAL_MIN());
+                branch(*this, y[i], INT_VAL_MIN());
+            }
+        
+        }else if(opt.branching() == BRANCHING_LEFT_TO_RIGHT){
+            branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+            branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        }else if(opt.branching() == BRANCHING_TOP_TO_BOTTOM){
+            branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+            branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        }else if(opt.branching() == BRANCHING_CUSTOM){
+            
+            //What do we do hereeeeee!!! PLZ
+            
+            
+        }else if(opt.branching() == BRANCHING_RAND){
+            branch(*this, x, INT_VAR_RND(0), INT_VAL_MIN());
+            branch(*this, y, INT_VAR_RND(0), INT_VAL_MIN());
+        }
+        
     }
     
     
@@ -219,7 +265,16 @@ int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
     opt.size(7);
+    opt.branching(SquarePacking::BRANCHING_RAND);
     
+    /*
+    opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
+    opt.branching(SquarePacking::BRANCHING_BIGGER_SQUARES_FIRST);
+    opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
+    opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
+    opt.branching(SquarePacking::BRANCHING_CUSTOM);
+     opt.branching(SquarePacking::BRANCHING_RAND);
+    */
     
     //You can select different branchings, either from the predefined or specifing some other with a merit function
     //opt.branching(QueensN::NO_HEURISTIC);
