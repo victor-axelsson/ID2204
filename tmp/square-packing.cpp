@@ -28,21 +28,29 @@ private:
         return n - i;
     }
     
+    
+    
 protected:
     IntVarArray x;
     IntVarArray y;
     IntVar s;
     int n;
     
-public:
+    int maxOfs(){
+        //double ceilSqrt = ceil(sqrt(n));
+        //return ceil(sqrt(n*(n+1)*(2*n+1)/6)), n*ceilSqrt;
+        return n * 5;
+    }
     
+public:
+
     SquarePacking(const SizeOptions& opt): Script(opt){
         n = opt.size();
 
         x = IntVarArray(*this, opt.size() , 0, opt.size());
         y = IntVarArray(*this, opt.size() , 0, opt.size());
-        s = IntVar(*this, 0, opt.size() + opt.size() -1);
-        
+        s = IntVar(*this, 0, maxOfs());
+
         
         //Make sure the x and y are within the boundries of s
         for(int i = 0; i < n; i++){
@@ -53,7 +61,7 @@ public:
         }
         
         
-        //No overlap
+        //No overlap, reification
         for(int i = 0; i < n; i++){
             int iSize = size(i, n);
             
@@ -61,7 +69,7 @@ public:
                 int zSize = size(z, n);
 
                 
-                //If x[i] is:
+                //If x[i] is to the:
                 BoolVar left(*this, 0, 1);
                 BoolVar right(*this, 0, 1);
                 BoolVar above(*this, 0, 1);
@@ -75,16 +83,42 @@ public:
                 
                 rel(*this, left + right + below + above > 0);
                 
-                cout <<"I: " << i << ", Z: " << z <<endl;
+                //cout <<"I: " << i << ", Z: " << z <<endl;
                 //cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
                 //cout << "Left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
                 
             }
         }
         
-        //Column sum
+        
+        //Part 3, Column and row constraints
+        for(int c = 0; c < maxOfs(); c++){
+            
+            //Create bool vars for columns and rows
+            BoolVarArray colsMatch(*this, n, 0, 1);
+            BoolVarArray rowsMatch(*this, n, 0, 1);
+            
+            for (int i=0; i<n; i++){
+                int iSize = size(i, n);
+                
+                //Apply the domain contstraints for rows and columns
+                dom(*this, x[i], c-iSize +1, c, colsMatch[i]);
+                dom(*this, y[i], c-iSize +1, c, rowsMatch[i]);
+            }
+            
+            //Sum them up and see that they all don't overfit the row or cols
+            rel(*this, sum(IntArgs::create(n,n,-1), colsMatch) <= s);
+            rel(*this, sum(IntArgs::create(n,n,-1), rowsMatch) <= s);
+        }
         
         
+        
+        
+        
+        
+        
+        // Do branching
+        //Apply branching on s first
         branch(*this, s,  INT_VAL_MIN());
         branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
         branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
@@ -113,7 +147,7 @@ public:
     virtual void
     print(std::ostream& os) const {
         
-        cout << "convert -size " << 11 << "x" << 11 << " xc:none ";
+        cout << "convert -size " << n + n -1 << "x" << n + n -1 << " xc:none ";
         
         for(int i = 0; i < n; i++){
             
@@ -139,7 +173,7 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(6);
+    opt.size(8);
     
     
     //You can select different branchings, either from the predefined or specifing some other with a merit function
