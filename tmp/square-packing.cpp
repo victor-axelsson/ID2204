@@ -29,6 +29,8 @@ private:
     }
     
     int startFrom1(){
+        
+        //Here we ignore 1x1 you can also ignore 2x2 by returning a 2
         return 1;
     }
     
@@ -76,16 +78,11 @@ protected:
     int n;
     
     int maxOfs(){
-        //double ceilSqrt = ceil(sqrt(n));
-        //return ceil(sqrt(n*(n+1)*(2*n+1)/6)), n*ceilSqrt;
-        //return n + n -1;
-        //return 1000;
-        
         return n * ceil(sqrt(n));
     }
     
     int minOfs(){
-        return ceil(sqrt(n*(n+1)*(2*n+1)/6));
+        return ceil(sqrt(n * (n + 1) * (2 * n + 1) / 6));
     }
     
 public:
@@ -102,8 +99,8 @@ public:
     SquarePacking(const SizeOptions& opt): Script(opt){
         n = opt.size();
 
-        x = IntVarArray(*this, opt.size() , 0, opt.size());
-        y = IntVarArray(*this, opt.size() , 0, opt.size());
+        x = IntVarArray(*this, opt.size() , 0, maxOfs());
+        y = IntVarArray(*this, opt.size() , 0, maxOfs());
         //s = IntVar(*this, 0, maxOfs());
         
         s = IntVar(*this, minOfs(), maxOfs());
@@ -131,12 +128,13 @@ public:
                 BoolVar above(*this, 0, 1);
                 BoolVar below(*this, 0, 1);
                 
+                //Check the separate reifications
                 rel(*this, x[z], IRT_GQ, LinIntExpr(x[i] + iSize).post(*this, IPL_VAL), left);
                 rel(*this, x[i], IRT_GQ, LinIntExpr(x[z] + zSize).post(*this, IPL_VAL), right);
                 rel(*this, y[i], IRT_GQ, LinIntExpr(y[z] + zSize).post(*this, IPL_VAL), below);
                 rel(*this, y[z], IRT_GQ, LinIntExpr(y[i] + iSize).post(*this, IPL_VAL), above);
                 
-                
+                //Al least on of these should apply
                 rel(*this, left + right + below + above > 0);
                 
                 //cout <<"I: " << i << ", Z: " << z <<endl;
@@ -158,24 +156,25 @@ public:
                 int iSize = size(i, n);
                 
                 //Apply the domain contstraints for rows and columns
-                dom(*this, x[i], c-iSize +1, c, colsMatch[i]);
-                dom(*this, y[i], c-iSize +1, c, rowsMatch[i]);
+                dom(*this, x[i], c - iSize +1, c, colsMatch[i]);
+                dom(*this, y[i], c - iSize +1, c, rowsMatch[i]);
             }
             
             //Sum them up and see that they all don't overfit the row or cols
-            rel(*this, sum(IntArgs::create(n,n,-1), colsMatch) <= s);
-            rel(*this, sum(IntArgs::create(n,n,-1), rowsMatch) <= s);
+            rel(*this, sum(IntArgs::create(n, n, -1), colsMatch) <= s);
+            rel(*this, sum(IntArgs::create(n, n, -1), rowsMatch) <= s);
         }
         
         //Remove symmetry
-        rel(*this, x[0] <= (s-n) / 2);
+        rel(*this, x[0] <= (s - n) / 2);
         rel(*this, y[0] <= x[0]);
         
         //Empty strip dominance
         for(int i = 0; i < n - startFrom1(); i++){
             int gap = getGaps(i);
             
-            if (size(i, n)<=45 || size(i, n)>=2){
+            //Check if within boundry
+            if (size(i, n) <= 45 || size(i, n) >= 2){
                 rel(*this, x[i] != gap);
                 rel(*this, y[i] != gap);
             }
@@ -264,8 +263,8 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(7);
-    opt.branching(SquarePacking::BRANCHING_RAND);
+    opt.size(15);
+    opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
     
     /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
