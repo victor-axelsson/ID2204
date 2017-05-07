@@ -28,6 +28,41 @@ private:
         return n - i;
     }
     
+    int getGaps(int i ){
+        
+        //Start with the specifica cases
+        if(i == 3){
+            return 3;
+        }else if(i == 2){
+            return 2;
+        }else{
+            
+            //Generic ones
+            if (i==45){
+                return 10;
+            } else if (i >=34){
+                return 9;
+            } else if (i >=30){
+                return 8;
+            }else if (i >= 22){
+                return 7;
+            }else if ( i >= 18){
+                return 6;
+            }else if (i >= 12){
+                return 5;
+            }else if (i >= 9){
+                return 4;
+            }else if (i >= 5){
+                return 3;
+            }else if (i >= 2){
+                return 2;
+            }else{
+                return -1;
+            }
+        }
+        
+        return -1;
+    }
     
     
 protected:
@@ -59,7 +94,7 @@ public:
         //s = IntVar(*this, 0, maxOfs());
         
         s = IntVar(*this, minOfs(), maxOfs());
-        
+
         //Make sure the x and y are within the boundries of s
         for(int i = 0; i < n; i++){
             int xW = size(i, n);
@@ -119,23 +154,25 @@ public:
             rel(*this, sum(IntArgs::create(n,n,-1), rowsMatch) <= s);
         }
         
-        
         //Remove symmetry
         rel(*this, x[0] <= (s-n) / 2);
         rel(*this, y[0] <= x[0]);
         
+        //Empty strip dominance
+        for(int i = 0; i < n; i++){
+            int gap = getGaps(i);
+            
+            if (size(i, n)<=45 || size(i, n)>=2){
+                rel(*this, x[i] != gap);
+                rel(*this, y[i] != gap);
+            }
+        }
         
         // Do branching
         //Apply branching on s first
         branch(*this, s,  INT_VAL_MIN());
         branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
         branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-    }
-    
-    
-    // cost function
-    virtual IntVar cost(void) const {
-        return s;
     }
     
     
