@@ -134,6 +134,8 @@ public:
     }
 };
 
+/*
+
 int main(int argc, char* argv[]) {
 	SizeOptions opt("Sudoku");
     Sudoku* m = new Sudoku(opt);
@@ -169,3 +171,4 @@ int main(int argc, char* argv[]) {
 	Script::run<Sudoku, DFS, SizeOptions>(opt);
     return 0;
 }
+ */

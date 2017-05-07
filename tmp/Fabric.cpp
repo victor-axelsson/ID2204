@@ -11,12 +11,14 @@
 #include <gecode/search.hh>
 #include "Examples.cpp"
 #include <gecode/minimodel.hh>
+#include <gecode/driver.hh>
+
 
 
 
 using namespace Gecode;
 using namespace std;
-const int NR_OF_ITEMS = 26;
+const int NR_OF_ITEMS = 6;
 
 
 class Fabric : public IntMinimizeSpace {
@@ -31,7 +33,6 @@ protected:
     
 public:
     Fabric(int width, int height) : xPos(*this, NR_OF_ITEMS, 0, width), yPos(*this, NR_OF_ITEMS, 0, height), lowestY(*this, 0, height), lowestX(*this, 0, width) {
-        
         canvasWidth = width;
         canvasHeight = height;
         
@@ -44,16 +45,20 @@ public:
             w[i] = fabric_examples_widths[i];
             h[i] = fabric_examples_heights[i];
             rel(*this, xPos[i], IRT_LQ, width - fabric_examples_widths[i]);
-            rel(*this, yPos[i], IRT_GQ, fabric_examples_heights[i]);
+            rel(*this, yPos[i], IRT_LQ, height - fabric_examples_heights[i]);
         }
         
         nooverlap(*this, xPos, w, yPos, h);
         
         max(*this, yPos, lowestY);
+        max(*this, xPos, lowestX);
         
+        //Rnd r(1U);
         
+        //INT_VAR_REGRET_MIN_MAX
+        //INT_VAR_SIZE_MIN
         branch(*this, yPos, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
-       // branch(*this, xPos, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
+        branch(*this, xPos, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     }
     
     
@@ -67,6 +72,7 @@ public:
         xPos.update(*this, share, s.xPos);
         yPos.update(*this, share, s.yPos);
         lowestY.update(*this, share, s.lowestY);
+        lowestX.update(*this, share, s.lowestX);
         canvasWidth = s.canvasWidth;
         canvasHeight = s.canvasHeight;
     }
@@ -91,9 +97,9 @@ public:
         for(int i = 0; i < NR_OF_ITEMS; i++){
             
             int x1 = xPos[i].min();
-            int y1 = canvasHeight - yPos[i].min();
+            int y1 = yPos[i].min();
             int x2 = xPos[i].min() + fabric_examples_widths[i];
-            int y2 = canvasHeight - yPos[i].min() - fabric_examples_heights[i];
+            int y2 = yPos[i].min() + fabric_examples_heights[i];
             
             cout << "  -fill "<< colors[i % 7] <<" -stroke black -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
         }
@@ -103,3 +109,19 @@ public:
     }
     
 };
+
+/*
+// main function
+int main(int argc, char* argv[]) {
+    // create model and search engine
+    Fabric* m = new Fabric(200, 2000);
+    BAB<Fabric> e(m);
+    delete m;
+    // search and print all solutions
+    while (Fabric* s = e.next()) {
+        s->print();
+        delete s;
+    }
+    return 0;
+}
+*/
