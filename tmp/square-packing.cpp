@@ -14,6 +14,7 @@
 #include <math.h>
 #include <gecode/minimodel.hh>
 
+
 using namespace Gecode;
 using namespace std;
 
@@ -40,18 +41,12 @@ public:
         
         int n = opt.size();
         
-        //cout << "s:" << s <<endl;
-        
-        
-        //max(*this, x, s);
-        //max(*this, y, s);
-        
         //Make sure the x and y are within the boundries of s
         for(int i = 0; i < n; i++){
             int xW = size(i, n);
             
-            rel(*this, x[i], IRT_LQ, s.min() - x[i].max() + xW);
-            rel(*this, y[i], IRT_LQ, s.min() - y[i].max() + xW);
+            rel(*this, x[i], IRT_LQ, LinIntExpr(s - x[i] + xW).post(*this, IPL_VAL));
+            rel(*this, y[i], IRT_LQ, LinIntExpr(s - y[i] + xW).post(*this, IPL_VAL));
         }
         
         
@@ -69,34 +64,17 @@ public:
                 BoolVar above(*this, 0, 1);
                 BoolVar below(*this, 0, 1);
                 
+                rel(*this, x[z], IRT_GQ, LinIntExpr(x[i] + iSize).post(*this, IPL_VAL), left);
+                rel(*this, x[i], IRT_GQ, LinIntExpr(x[z] + zSize).post(*this, IPL_VAL), right);
+                rel(*this, y[i], IRT_GQ, LinIntExpr(y[z] + zSize).post(*this, IPL_VAL), below);
+                rel(*this, y[z], IRT_GQ, LinIntExpr(y[i] + iSize).post(*this, IPL_VAL), above);
                 
-                rel(*this, x[z], IRT_GQ, x[i].max() + iSize, left);
-                rel(*this, x[i], IRT_GQ, x[z].max() + zSize, right);
-                rel(*this, y[i], IRT_GQ, y[z].max() + zSize, below);
-                rel(*this, y[z], IRT_GQ, y[i].max() + iSize, above);
-                
-                
-                /*
-                int refied = 0;
-                // s1 is left of s2
-                refied += x[i].max() + iSize < x[z].min() ? 1 : 0;
-                
-                // s2 is left of s1
-                refied += x[z].max() + zSize < x[i].min() ? 1 : 0;
-                
-                // s1 is above s2
-                refied += y[i].max() + iSize < y[z].min() ? 1 : 0;
-                
-                // s2 is above s1
-                refied += y[z].max() + zSize < y[i].min() ? 1 : 0;
-                */
                 
                 rel(*this, left + right + below + above > 0);
                 
                 cout <<"I: " << i << ", Z: " << z <<endl;
                 cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
-                cout << "left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
-                
+                cout << "Left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
                 
             }
         }
@@ -104,7 +82,7 @@ public:
         //Column sum
         
         
-        
+        branch(*this, s,  INT_VAL_MIN());
         branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
         branch(*this, y, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
     }
@@ -116,10 +94,10 @@ public:
     }
     
     
-    
-    SquarePacking(bool share, SquarePacking& s) : Script(share, s) {
-        x.update(*this, share, s.x);
-        y.update(*this, share, s.y);
+    SquarePacking(bool share, SquarePacking& tmp) : Script(share, tmp) {
+        x.update(*this, share, tmp.x);
+        y.update(*this, share, tmp.y);
+        s.update(*this, share, tmp.s);
     }
     
     virtual Space* copy(bool share) {
