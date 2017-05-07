@@ -39,7 +39,8 @@ public:
     s(*this, opt.size() + opt.size() -1, opt.size() + opt.size() -1){
         
         int n = opt.size();
-
+        
+        //cout << "s:" << s <<endl;
         
         
         //max(*this, x, s);
@@ -49,20 +50,18 @@ public:
         for(int i = 0; i < n; i++){
             int xW = size(i, n);
             
-            rel(*this, x[i], IRT_LQ, n - x[i].max() + xW);
-            rel(*this, y[i], IRT_LQ, n - y[i].max() + xW);
+            rel(*this, x[i], IRT_LQ, s.min() - x[i].max() + xW);
+            rel(*this, y[i], IRT_LQ, s.min() - y[i].max() + xW);
         }
-        
-        
-        
         
         
         //No overlap
         for(int i = 0; i < n; i++){
             int iSize = size(i, n);
-            for(int z = i +1; z < n; z++){
+            
+            for(int z = i + 1; z < n; z++){
                 int zSize = size(z, n);
-                
+
                 
                 //If x[i] is:
                 BoolVar left(*this, 0, 1);
@@ -71,10 +70,10 @@ public:
                 BoolVar below(*this, 0, 1);
                 
                 
-                rel(*this, x[z], IRT_GR, x[i].max() + iSize, left);
-                rel(*this, x[i], IRT_GR, x[z].max() + zSize, right);
-                rel(*this, y[i], IRT_GR, y[z].max() + zSize, below);
-                rel(*this, y[z], IRT_GR, y[i].max() + iSize, above);
+                rel(*this, x[z], IRT_GQ, x[i].max() + iSize, left);
+                rel(*this, x[i], IRT_GQ, x[z].max() + zSize, right);
+                rel(*this, y[i], IRT_GQ, y[z].max() + zSize, below);
+                rel(*this, y[z], IRT_GQ, y[i].max() + iSize, above);
                 
                 
                 /*
@@ -94,17 +93,16 @@ public:
                 
                 rel(*this, left + right + below + above > 0);
                 
-                
-                
                 cout <<"I: " << i << ", Z: " << z <<endl;
                 cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
-                cout << "left:" << left << "Right: " << right << " Below:" << below << " above: " << above << endl;
-                
-                
+                cout << "left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
                 
                 
             }
         }
+        
+        //Column sum
+        
         
         
         branch(*this, x, INT_VAR_SIZE_MIN(), INT_VAL_MIN());
