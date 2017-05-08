@@ -34,19 +34,6 @@ using namespace Gecode::Int;
 // The no-overlap propagator
 class NoOverlap : public Propagator {
     
-private:
-    
-    bool isSubsumed(){
-        int n = x.size();
-        for(int i = 0; i < n; i++){
-            if(!x[i].assigned() || !y[i].assigned()){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    
 protected:
   // The x-coordinates
   ViewArray<IntView> x;
@@ -106,35 +93,49 @@ public:
   
   // Perform propagation
   virtual ExecStatus propagate(Space& home, const ModEventDelta&) {
-      //Check if subsumed
-      if(isSubsumed()){
-         return home.ES_SUBSUMED(* this);
-      }
       
-
     
       int n = x.size();
-    
+      int counterSubsumption = 0;
+      
       //Checkf for the overlaps
       for (int i = 0; i < n; i++) {
-          for (int j = i + 1; j < n; j++) {
-              
-              //Check for overlap
-              ModEvent left = x[j].gq(home, x[i].min() + w[i]);
-              ModEvent right = x[i].gq(home, x[j].min() + w[j]);
-              ModEvent above = y[j].gq(home, y[i].min() + h[i]);
-              ModEvent below = y[i].gq(home, y[j].min() + h[j]);
-              
-              //Check for modifications
-              if(me_modified(left) && me_modified(right) && me_modified(above) && me_modified(below)){
-                  return ES_NOFIX;
-              }
-
-              //Check for fails
-              if(me_failed(left) && me_failed(right) && me_failed(above) && me_failed(below)){
-                  return ES_FAILED;
+          
+          if(x[i].assigned() && y[i].assigned()){
+          
+              for (int j = i + 1; j < n; j++) {
+                  
+                  if(x[j].assigned() && y[j].assigned()){
+                  
+                      counterSubsumption++;
+                      
+                      //Check for overlap
+                      ModEvent left = x[j].gq(home, x[i].val() + w[i]);
+                      ModEvent right = x[i].gq(home, x[j].val() + w[j]);
+                      ModEvent above = y[j].gq(home, y[i].val() + h[i]);
+                      ModEvent below = y[i].gq(home, y[j].val() + h[j]);
+                      
+                      
+                      //Check for modifications
+                      if(me_modified(left) && me_modified(right) && me_modified(above) && me_modified(below)){
+                          return ES_NOFIX;
+                      }
+                      
+                      
+                      //Check for fails
+                      if(me_failed(left) && me_failed(right) && me_failed(above) && me_failed(below)){
+                          return ES_FAILED;
+                      }
+                    
+                  }
               }
           }
+      }
+      
+      
+      //Check for subsumption
+      if(counterSubsumption == n){
+          return home.ES_SUBSUMED(* this);
       }
       
       // Possible statuses
@@ -144,52 +145,10 @@ public:
       //ExecStatus::ES_NOFIX_FORCE
       //ExecStatus::ES_OK;
       
-      return ES_FIX;
+      return ES_OK;
   }
-  
-  /*
-  virtual ExecStatus propagate(Space& home, const ModEventDelta&) {
-	  for (int i = 0; i < x.size(); ++i) {
-		  if (x[i].assigned() && y[i].assigned()) {
-			  for (int j = 0; j < x.size(); ++j) {
-				  if (i == j) continue;
 
-				  if (y[j].assigned() && (y[i].val() > y[j].val() && y[i].val() < y[j].val() + h[j])) {
-					  for (int k = x[i].val() - w[i]; k <= x[i].val() + w[i]; ++k) {
-						  GECODE_ME_CHECK(x[j].nq(home, k));
-					  }
-				  }
-				  if (x[j].assigned() && (x[i].val() > x[j].val() && x[i].val() < x[j].val() + w[j])) {
-					  for (int k = y[i].val() - h[i]; k <= y[i].val() + h[i]; ++k) {
-						  GECODE_ME_CHECK(y[j].nq(home, k));
-					  }
-				  }
-			  }
-		  }
-	  }
-
-
-	  bool subsumed = true;
-	  for (int i = 0; i < x.size() && subsumed; ++i) {
-		  if (!x[i].assigned()) {
-			  subsumed = false;
-		  }
-	  }
-	  for (int i = 0; i < y.size() && subsumed; ++i) {
-		  if (!y[i].assigned()) {
-			  subsumed = false;
-		  }
-	  }
-	  if (subsumed)
-		  return home.ES_SUBSUMED(*this);
-
-	  return ES_NOFIX;
-
-
-	  //rel(*this, (x[i] + size(i) <= x[j]) || (x[j] + size(j) <= x[i]) || (y[i] + size(i) <= y[j]) || (y[j] + size(j) <= y[i]));  
-  }*/
-
-  // Dispose propagator and return its size
+    // Dispose propagator and return its size
   virtual size_t dispose(Space& home) {
     x.cancel(home,*this,PC_INT_BND);
     y.cancel(home,*this,PC_INT_BND);
@@ -197,3 +156,29 @@ public:
     return sizeof(*this);
   }
 };
+
+// We needed to comment this out in order to test it with out implementation.
+/*
+void nooverlap(Home home,
+               const IntVarArgs& x, const IntArgs& w,
+               const IntVarArgs& y, const IntArgs& h) {
+    // Check whether the arguments make sense
+    if ((x.size() != y.size()) || (x.size() != w.size()) ||
+        (y.size() != h.size()))
+        throw ArgumentSizeMismatch("nooverlap");
+    // Never post a propagator in a failed space
+    if (home.failed()) return;
+    // Set up array of views for the coordinates
+    ViewArray<IntView> vx(home,x);
+    ViewArray<IntView> vy(home,y);
+    // Set up arrays (allocated in home) for width and height and initialize
+    int* wc = static_cast<Space&>(home).alloc<int>(x.size());
+    int* hc = static_cast<Space&>(home).alloc<int>(y.size());
+    for (int i=x.size(); i--; ) {
+        wc[i]=w[i]; hc[i]=h[i];
+    }
+    // If posting failed, fail space
+    if (NoOverlap::post(home,vx,wc,vy,hc) != ES_OK)
+        home.fail();
+}
+*/

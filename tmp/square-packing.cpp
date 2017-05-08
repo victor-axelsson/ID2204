@@ -21,16 +21,10 @@
 using namespace Gecode;
 using namespace std;
 
-
-
-namespace custom {
-	/*
-	* Post the constraint that the rectangles defined by the coordinates
-	* x and y and width w and height h do not overlap.
-	*
-	* This is the function that you will call from your model. The best
-	* is to paste the entire file into your model.
-	*/
+/*
+    Used for testing the propagator, we needed to copy paste it in in order to make it work
+*/
+namespace CustomPropagator {
 
 	void custom_nooverlap(Home home,
 		const IntVarArgs& x, const IntArgs& w,
@@ -54,15 +48,14 @@ namespace custom {
 		if (NoOverlap::post(home, vx, wc, vy, hc) != ES_OK)
 			home.fail();
 	}
-
 }
-//Just some colors for printing with ImageMagic
+
+//Just some colors for printing with ImageMagic and convert command
 static const string colors[] = {"red", "green", "silver", "blue", "yellow", "brown", "gray", "white"};
 
 class SquarePacking :  public Script {
     
 private:
-    
     
     static int size(int i, int n){
         //[0, 1, 2, 3, 4, 5] == index
@@ -119,10 +112,12 @@ protected:
     int n;
     
     int maxOfs(){
+        //Packing each square in a sepparate square n by n
         return n * ceil(sqrt(n));
     }
     
     int minOfs(){
+        //Sum of areas of all squares
         return ceil(sqrt(n * (n + 1) * (2 * n + 1) / 6));
     }
     
@@ -148,8 +143,6 @@ public:
           
         x = IntVarArray(*this, opt.size() , 0, maxOfs());
         y = IntVarArray(*this, opt.size() , 0, maxOfs());
-        //s = IntVar(*this, 0, maxOfs());
-        
         s = IntVar(*this, minOfs(), maxOfs());
 
         //Make sure the x and y are within the boundries of s
@@ -183,26 +176,20 @@ public:
                     rel(*this, y[i], IRT_GQ, LinIntExpr(y[z] + zSize).post(*this, IPL_VAL), below);
                     rel(*this, y[z], IRT_GQ, LinIntExpr(y[i] + iSize).post(*this, IPL_VAL), above);
                     
-                    //Al least on of these should apply
+                    //Al least one of these should apply
                     rel(*this, left + right + below + above > 0);
-                    
-                    //cout <<"I: " << i << ", Z: " << z <<endl;
-                    //cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
-                    //cout << "Left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
-                    
                 }
             }
         }else if(opt.model() == PROPAGATION_CUSTOM){
             
-            
+            //If you want to use the custom propagator
             IntArgs w(n), h(n);
             for (int i = 0; i < n; ++i) {
                 w[i] = size(i, n);
                 h[i] = size(i, n);
             }
 
-			custom::custom_nooverlap(*this, x, w, y, h);
-             
+			CustomPropagator::custom_nooverlap(*this, x, w, y, h);
         }
         
         
@@ -287,12 +274,16 @@ public:
         return new SquarePacking(share, *this);
     }
     
-    
     //Print solution
     virtual void
     print(std::ostream& os) const {
         
-        cout << "convert -size " << n + n -1 << "x" << n + n -1 << " xc:none ";
+        /*
+         If you are on UNIX systems you can use copy paste the convert command 
+         into your terminal and render an image from the printout
+        */
+        
+        os <<endl << "convert -size " << s.max()<< "x" << s.max()<< " xc:none ";
         
         for(int i = 0; i < n; i++){
             
@@ -302,15 +293,16 @@ public:
             int y2 = y[i].min() + size(i, n) -1;
             
             if(size(i, n) == 1){
-                cout << "  -fill "<< colors[i % 7] <<" -draw \" color " << x1 << "," << y1 << " point " << "\" ";
+                //If you want to render the 1x1 square
+                //cout << "  -fill "<< colors[i % 7] <<" -draw \" color " << x1 << "," << y1 << " point " << "\" ";
             }else{
-                cout << "  -fill "<< colors[i % 7] <<" -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
+                os << "  -fill "<< colors[i % 7] <<" -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
             }
         }
         
-        cout << " -scale 600% squares.jpg ";
+        os << " -scale 600% squares.jpg " <<endl <<endl;
         
-        os << "X: " << x <<endl << "Y:" << y <<endl <<"S: " << s;
+        os << "X: " << x <<endl << "Y:" << y <<endl <<"S: " << s <<endl << "------------------------";
     }
 };
 
@@ -318,9 +310,10 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(7);
+    opt.size(6);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
-    opt.model(SquarePacking::PROPAGATION_CUSTOM);
+    opt.model(SquarePacking::PROPAGATION_REIFIED);
+    //opt.model(SquarePacking::PROPAGATION_CUSTOM);
     
     
     /*
@@ -330,9 +323,6 @@ int main(int argc, char* argv[]) {
     opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
      opt.branching(SquarePacking::BRANCHING_RAND);
     */
-    
-    
-
     
     Script::run<SquarePacking, BAB, SizeOptions>(opt);
 
