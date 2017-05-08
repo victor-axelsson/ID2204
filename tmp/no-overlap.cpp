@@ -46,27 +46,6 @@ private:
         return true;
     }
     
-    int startFrom1(){
-        //Here we ignore 1x1 you can also ignore 2x2 by returning a 2
-        return 1;
-    }
-    
-    bool overlaps(int i, int j, Space& home){
-        
-        
-        bool left = x[j].gq(home, x[i].val() + w[i]);
-        
-                 
-                 
-        x[i].gq(home, x[j].min()+w[j]) == Int::ME_INT_FAILED &&
-        x[j].gq(home, x[i].min()+w[i]) == Int::ME_INT_FAILED &&
-        y[i].gq(home, y[j].min()+h[j]) == Int::ME_INT_FAILED &&
-        y[j].gq(home, y[i].min()+h[i]) == Int::ME_INT_FAILED;
-        
-        
-        return false;
-    }
-    
     
 protected:
   // The x-coordinates
@@ -185,7 +164,7 @@ public:
  * This is the function that you will call from your model. The best
  * is to paste the entire file into your model.
  */
-void nooverlap(Home home, 
+void nooverlap2(Home home,
                const IntVarArgs& x, const IntArgs& w,
                const IntVarArgs& y, const IntArgs& h) {
   // Check whether the arguments make sense

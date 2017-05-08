@@ -15,6 +15,9 @@
 #include <gecode/minimodel.hh>
 #include <string>
 
+
+#include "no-overlap.cpp"
+
 using namespace Gecode;
 using namespace std;
 
@@ -98,6 +101,11 @@ public:
         BRANCHING_RAND
     };
     
+    enum{
+        PROPAGATION_REIFIED,
+        PROPAGATION_CUSTOM
+    };
+    
     SquarePacking(const SizeOptions& opt): Script(opt){
 
         n = opt.size();
@@ -116,35 +124,49 @@ public:
             rel(*this, y[i], IRT_LQ, LinIntExpr(s - y[i] + xW).post(*this, IPL_VAL));
         }
         
+        if(opt.model() == PROPAGATION_REIFIED){
         
-        //No overlap, reification
-        for(int i = 0; i < n - startFrom1(); i++){
-            int iSize = size(i, n);
-            
-            for(int z = i + 1; z < n - startFrom1(); z++){
-                int zSize = size(z, n);
-
+    
+            //No overlap, reification
+            for(int i = 0; i < n - startFrom1(); i++){
+                int iSize = size(i, n);
                 
-                //If x[i] is to the:
-                BoolVar left(*this, 0, 1);
-                BoolVar right(*this, 0, 1);
-                BoolVar above(*this, 0, 1);
-                BoolVar below(*this, 0, 1);
-                
-                //Check the separate reifications
-                rel(*this, x[z], IRT_GQ, LinIntExpr(x[i] + iSize).post(*this, IPL_VAL), left);
-                rel(*this, x[i], IRT_GQ, LinIntExpr(x[z] + zSize).post(*this, IPL_VAL), right);
-                rel(*this, y[i], IRT_GQ, LinIntExpr(y[z] + zSize).post(*this, IPL_VAL), below);
-                rel(*this, y[z], IRT_GQ, LinIntExpr(y[i] + iSize).post(*this, IPL_VAL), above);
-                
-                //Al least on of these should apply
-                rel(*this, left + right + below + above > 0);
-                
-                //cout <<"I: " << i << ", Z: " << z <<endl;
-                //cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
-                //cout << "Left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
-                
+                for(int z = i + 1; z < n - startFrom1(); z++){
+                    int zSize = size(z, n);
+                    
+                    
+                    //If x[i] is to the:
+                    BoolVar left(*this, 0, 1);
+                    BoolVar right(*this, 0, 1);
+                    BoolVar above(*this, 0, 1);
+                    BoolVar below(*this, 0, 1);
+                    
+                    //Check the separate reifications
+                    rel(*this, x[z], IRT_GQ, LinIntExpr(x[i] + iSize).post(*this, IPL_VAL), left);
+                    rel(*this, x[i], IRT_GQ, LinIntExpr(x[z] + zSize).post(*this, IPL_VAL), right);
+                    rel(*this, y[i], IRT_GQ, LinIntExpr(y[z] + zSize).post(*this, IPL_VAL), below);
+                    rel(*this, y[z], IRT_GQ, LinIntExpr(y[i] + iSize).post(*this, IPL_VAL), above);
+                    
+                    //Al least on of these should apply
+                    rel(*this, left + right + below + above > 0);
+                    
+                    //cout <<"I: " << i << ", Z: " << z <<endl;
+                    //cout << "x[z]" << x[z] << " x[i]" << x[i] << " y[i]" << y[i] << " y[z]" << y[z] <<endl;
+                    //cout << "Left:" << left << " Right:" << right << " Below:" << below << " Above:" << above << endl << endl;
+                    
+                }
             }
+        }else if(opt.model() == PROPAGATION_CUSTOM){
+            
+            /*
+            IntArgs w(n), h(n);
+            for (int i = 0; i < n; ++i) {
+                w[i] = size(i, n);
+                h[i] = size(i, n);
+            }
+
+            nooverlap2(*this, x, w, y, h);
+             */
         }
         
         
@@ -260,8 +282,10 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(11);
+    opt.size(7);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
+    //opt.model(SquarePacking::PROPAGATION_CUSTOM);
+    
     
     /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
