@@ -13,14 +13,19 @@
 #include <gecode/driver.hh>
 #include <math.h>
 #include <gecode/minimodel.hh>
-#include "Examples.cpp"
+#include <string>
 
 using namespace Gecode;
 using namespace std;
 
+//Just some colors for printing with ImageMagic
+static const string colors[] = {"red", "green", "silver", "blue", "yellow", "brown", "gray", "white"};
+
 class SquarePacking :  public Script {
     
 private:
+    
+    
     static int size(int i, int n){
         //[0, 1, 2, 3, 4, 5] == index
         //[6, 5, 4, 3, 2, 1] == size from n
@@ -255,7 +260,7 @@ public:
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
-    opt.size(8);
+    opt.size(11);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
     
     /*
