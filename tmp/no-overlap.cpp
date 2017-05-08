@@ -95,7 +95,16 @@ public:
     //
     // This is what YOU have to add!
     //
-
+      
+      // Possible statuses
+      //ExecStatus::ES_FIX
+      //ExecStatus::ES_FAILED
+      //ExecStatus::ES_NOFIX
+      //ExecStatus::ES_NOFIX_FORCE
+      //ExecStatus::ES_OK;
+      
+      
+      return ES_OK;
   }
 
   // Dispose propagator and return its size
