@@ -21,6 +21,41 @@
 using namespace Gecode;
 using namespace std;
 
+
+
+namespace custom {
+	/*
+	* Post the constraint that the rectangles defined by the coordinates
+	* x and y and width w and height h do not overlap.
+	*
+	* This is the function that you will call from your model. The best
+	* is to paste the entire file into your model.
+	*/
+
+	void custom_nooverlap(Home home,
+		const IntVarArgs& x, const IntArgs& w,
+		const IntVarArgs& y, const IntArgs& h) {
+		// Check whether the arguments make sense
+		if ((x.size() != y.size()) || (x.size() != w.size()) ||
+			(y.size() != h.size()))
+			throw ArgumentSizeMismatch("nooverlap");
+		// Never post a propagator in a failed space
+		if (home.failed()) return;
+		// Set up array of views for the coordinates
+		ViewArray<IntView> vx(home, x);
+		ViewArray<IntView> vy(home, y);
+		// Set up arrays (allocated in home) for width and height and initialize
+		int* wc = static_cast<Space&>(home).alloc<int>(x.size());
+		int* hc = static_cast<Space&>(home).alloc<int>(y.size());
+		for (int i = x.size(); i--; ) {
+			wc[i] = w[i]; hc[i] = h[i];
+		}
+		// If posting failed, fail space
+		if (NoOverlap::post(home, vx, wc, vy, hc) != ES_OK)
+			home.fail();
+	}
+
+}
 //Just some colors for printing with ImageMagic
 static const string colors[] = {"red", "green", "silver", "blue", "yellow", "brown", "gray", "white"};
 
@@ -105,6 +140,7 @@ public:
         PROPAGATION_REIFIED,
         PROPAGATION_CUSTOM
     };
+
     
     SquarePacking(const SizeOptions& opt): Script(opt){
 
@@ -158,15 +194,15 @@ public:
             }
         }else if(opt.model() == PROPAGATION_CUSTOM){
             
-            /*
+            
             IntArgs w(n), h(n);
             for (int i = 0; i < n; ++i) {
                 w[i] = size(i, n);
                 h[i] = size(i, n);
             }
 
-            nooverlap2(*this, x, w, y, h);
-             */
+			custom::custom_nooverlap(*this, x, w, y, h);
+             
         }
         
         
@@ -284,7 +320,7 @@ int main(int argc, char* argv[]) {
     SizeOptions opt("SquarePacking");
     opt.size(7);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
-    //opt.model(SquarePacking::PROPAGATION_CUSTOM);
+    opt.model(SquarePacking::PROPAGATION_CUSTOM);
     
     
     /*
@@ -302,4 +338,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
