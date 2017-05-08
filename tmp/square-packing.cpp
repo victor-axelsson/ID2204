@@ -270,6 +270,8 @@ int main(int argc, char* argv[]) {
     opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
      opt.branching(SquarePacking::BRANCHING_RAND);
     */
+    
+    
 
     
     Script::run<SquarePacking, BAB, SizeOptions>(opt);

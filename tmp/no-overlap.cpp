@@ -33,6 +33,41 @@ using namespace Gecode::Int;
 
 // The no-overlap propagator
 class NoOverlap : public Propagator {
+    
+private:
+    
+    bool isSubsumed(){
+        int n = x.size();
+        for(int i = 0; i < n; i++){
+            if(!x[i].assigned() || !y[i].assigned()){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    int startFrom1(){
+        //Here we ignore 1x1 you can also ignore 2x2 by returning a 2
+        return 1;
+    }
+    
+    bool overlaps(int i, int j, Space& home){
+        
+        
+        bool left = x[j].gq(home, x[i].val() + w[i]);
+        
+                 
+                 
+        x[i].gq(home, x[j].min()+w[j]) == Int::ME_INT_FAILED &&
+        x[j].gq(home, x[i].min()+w[i]) == Int::ME_INT_FAILED &&
+        y[i].gq(home, y[j].min()+h[j]) == Int::ME_INT_FAILED &&
+        y[j].gq(home, y[i].min()+h[i]) == Int::ME_INT_FAILED;
+        
+        
+        return false;
+    }
+    
+    
 protected:
   // The x-coordinates
   ViewArray<IntView> x;
@@ -88,13 +123,41 @@ public:
   virtual PropCost cost(const Space&, const ModEventDelta&) const {
     return PropCost::quadratic(PropCost::LO,2*x.size());
   }
+    
 
   // Perform propagation
   virtual ExecStatus propagate(Space& home, const ModEventDelta&) {
 
-    //
-    // This is what YOU have to add!
-    //
+      //Check if subsumed
+      if(isSubsumed()){
+          return home.ES_SUBSUMED(* this);
+      }
+      
+
+    
+      int n = x.size();
+    
+      //Checkf for the overlaps
+      for (int i = 0; i < n; i++) {
+          for (int j = i + 1; j < n; j++) {
+              
+              //Check for overlap
+              ModEvent left = x[j].gq(home, x[i].val() + w[i]);
+              ModEvent right = x[i].gq(home, x[j].val() + w[j]);
+              ModEvent above = y[j].gq(home, y[i].val() + h[i]);
+              ModEvent below = y[i].gq(home, y[j].val() + h[j]);
+              
+              //Check for modifications
+              if(me_modified(left) && me_modified(right) && me_modified(above) && me_modified(below)){
+                  return ES_NOFIX;
+              }
+
+              //Check for fails
+              if(me_failed(left) && me_failed(right) && me_failed(above) && me_failed(below)){
+                  return ES_FAILED;
+              }
+          }
+      }
       
       // Possible statuses
       //ExecStatus::ES_FIX
@@ -103,8 +166,7 @@ public:
       //ExecStatus::ES_NOFIX_FORCE
       //ExecStatus::ES_OK;
       
-      
-      return ES_OK;
+      return ES_FIX;
   }
 
   // Dispose propagator and return its size
