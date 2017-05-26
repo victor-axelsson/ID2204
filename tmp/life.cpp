@@ -26,7 +26,7 @@ class Life : public Script {
     
     void printKitten() const {
         
-        string s = "";
+        string s = "\n";
         s += "                                            .--. \n";
         s += "                                             `.  \\ \n";
         s += "                                               \\  \\ \n";
@@ -96,8 +96,8 @@ class Life : public Script {
 					neighbourCells[6] = boardAsMatrix(i - 1, j);    
 					neighbourCells[7] = boardAsMatrix(i + 1, j);       
 			
-					rel(*this, ((boardAsMatrix(i, j) == 1 && (sum(neighbourCells) == 2 || sum(neighbourCells) == 3))) || // if the cell is alive, it should stay alive, so 2 or 3 neighbours alive
-						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3));									     // if the cell is dead, it should not have 3 neighbours
+					rel(*this, ((boardAsMatrix(i, j) == 1 && (sum(neighbourCells) == 2 || sum(neighbourCells) == 3)) || // if the cell is alive, it should stay alive, so 2 or 3 neighbours alive
+						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3)));									     // if the cell is dead, it should not have 3 neighbours
 				}
 			}
 
@@ -123,38 +123,24 @@ class Life : public Script {
         //Print solution
         virtual void print(std::ostream& os) const {
             
+        
+            printKitten();
+            
             int sum = 0;
-            for(int i = 0; i < n * n; i++){
-                
-                if(i % n == 0){
+            for(int i = 0; i < (n + 4) * (n + 4); i++){
+                if(i % (n + 4) == 0){
                     os << endl;
                 }
-                
-                
+            
                 if(board[i].assigned()){
-                    os << " " << board[i].val() << " ";
+                    os << " "  << board[i].min() << " ";
                     sum += board[i].val();
                 }else{
                     os << " ? ";
                 }
             }
             
-            os << "SUM: " << sum; 
-            
-            printKitten();
-            os <<endl << "COUNT: " << sum <<endl;
-        
-            for(int i = 0; i < n * n; i++){
-                if(i % n == 0){
-                    os << endl;
-                }
-            
-                if(board[i].assigned()){
-                    os << " "  << board[i].min() << " ";
-                }else{
-                    os << " ? ";
-                }
-            }
+            os <<endl << " COUNT: " << sum <<endl;
         }
     };
     
