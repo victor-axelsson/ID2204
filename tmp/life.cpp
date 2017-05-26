@@ -23,9 +23,43 @@ const int DEAD_ROWS = 2;
 class Life : public IntMaximizeScript {
         
     private:
+    
+    void printKitten() const {
+        
+        string s = "";
+        s += "                                 .--. \n";
+        s += "                                             `.  \\ \n";
+        s += "                                               \\  \\ \n";
+        s += "                                                .  \\ \n";
+        s += "                                                :   . \n";
+        s += "                                                |    . \n";
+        s += "                                                |    : \n";
+        s += "                                                |    | \n";
+        s += "  ..._  ___                                     |    | \n";
+        s += " `.\"\".`''''\"\"--..___                            |    | \n";
+        s += " ,-\\  \\             ""-...__         _____________/    | \n";
+        s += " / ` \" '                 `\"\"\"\"\"\"\"\"                    . \n";
+        s += " \\                                                     L \n";
+        s += " (>                                                      \\ \n";
+        s += "/                                                         \\ \n";
+        s += "\\_    ___..---.                                            L \n";
+        s += "  `--'         '.                                           \\ \n";
+        s += "                 .                                           \\_ \n";
+        s += "                _/`.                                           `.._ \n";
+        s += "             .'     -.                                             `. \n";
+        s += "            /     __.-Y     /''''''-...___,...--------.._            | \n";
+        s += "           /   _.\"    |    /                ' .      \\   '---..._    | \n";
+        s += "          /   /      /    /                _,. '    ,/           |   | \n";
+        s += "          \\_,'     _.'   /              /''     _,-'            _|   | \n";
+        s += "                  '     /               `-----''               /     | \n";
+        s += "                  `...-'     GAME OF LIFE                      `...-' \n";
+        s += " \n";
+        cout << s;
+    }
         
     protected:
-    
+
+   
     IntVar aliveNodes;
     IntVarArray board;
     int n;
@@ -51,10 +85,6 @@ class Life : public IntMaximizeScript {
 			count(*this, boardAsMatrix.col(secondToLast), 1, IRT_EQ, 0);
 			count(*this, boardAsMatrix.col(last), 1, IRT_EQ, 0);
             
-
-
-            std::cout << "In ctor. N:" << n;
-            
         }
     
         Life(bool share, Life& tmp) : IntMaximizeScript(share, tmp) {
@@ -76,13 +106,16 @@ class Life : public IntMaximizeScript {
         //Print solution
         virtual void print(std::ostream& os) const {
             
+            printKitten();
+            os <<endl << "COUNT: " << aliveNodes.min() <<endl;
+            
+
             for(int i = 0; i < n * n; i++){
                 if(i % n == 0){
                     os << endl;
                 }
             
                 os << " "  << board[i].min() << " ";
-                //os << " 0 ";
             }
             
             
@@ -93,7 +126,7 @@ class Life : public IntMaximizeScript {
     int main(int argc, char* argv[]) {
         
         SizeOptions opt("Life");
-        opt.size(6);
+        opt.size(8);
 
         IntMaximizeScript::run<Life, BAB, SizeOptions>(opt);
         
