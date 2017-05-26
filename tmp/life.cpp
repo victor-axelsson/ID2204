@@ -27,7 +27,7 @@ class Life : public IntMaximizeScript {
     void printKitten() const {
         
         string s = "";
-        s += "                                 .--. \n";
+        s += "                                             .--. \n";
         s += "                                             `.  \\ \n";
         s += "                                               \\  \\ \n";
         s += "                                                .  \\ \n";
@@ -109,23 +109,18 @@ class Life : public IntMaximizeScript {
             printKitten();
             os <<endl << "COUNT: " << aliveNodes.min() <<endl;
             
-
             for(int i = 0; i < n * n; i++){
                 if(i % n == 0){
                     os << endl;
                 }
-            
                 os << " "  << board[i].min() << " ";
             }
-            
-            
-                   // os << "  -fill "<< colors[i % 7] <<" -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
         }
     };
     
     int main(int argc, char* argv[]) {
         
-        SizeOptions opt("Life");
+        SizeOptions opt("Game of Life");
         opt.size(8);
 
         IntMaximizeScript::run<Life, BAB, SizeOptions>(opt);
