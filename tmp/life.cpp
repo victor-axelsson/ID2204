@@ -147,7 +147,8 @@ class Life : public Script {
     int main(int argc, char* argv[]) {
         
         SizeOptions opt("Life");
-        opt.size(11);
+		opt.solutions(0);
+        opt.size(8);
 
         IntMaximizeScript::run<Life, BAB, SizeOptions>(opt);
         
