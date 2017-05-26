@@ -18,7 +18,7 @@
 using namespace Gecode;
 using namespace std;
 const int NR_OF_ITEMS = 6;
-
+const int DEAD_ROWS = 2;
 
 class Life : public IntMaximizeScript {
         
@@ -27,13 +27,16 @@ class Life : public IntMaximizeScript {
     protected:
     
     IntVar aliveNodes;
+    IntVarArray board;
     int n;
     
     public:
 
-        Life(const SizeOptions& opt): IntMaximizeScript(opt){
-            //Branching and shiet
-            n = opt.size();
+        Life(const SizeOptions& opt): IntMaximizeScript(opt), n(opt.size()),
+            aliveNodes(*this, 0, opt.size() * opt.size()),
+            board(*this, opt.size() + (DEAD_ROWS * 2) * (DEAD_ROWS * 2), 0, 1){
+
+                
             
             std::cout << "In ctor. N:" << n;
             
