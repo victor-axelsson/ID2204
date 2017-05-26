@@ -51,14 +51,14 @@ protected:
     public:
         // Position of view
         int pos;
-        // Position of interval split
-		int intervalSplitPosition;
+        // Position of obligatory section start
+		int obligatorySectionStart;
         
         /* Initialize description for brancher b, number of
          *  alternatives a, position p, and ???.
          */
         Description(const Brancher& b, unsigned int a, int p, int split)
-        : Choice(b,a), pos(p), intervalSplitPosition(split) {}
+        : Choice(b,a), pos(p), obligatorySectionStart(split) {}
         // Report size occupied
         virtual size_t size(void) const {
             return sizeof(Description);
@@ -67,7 +67,7 @@ protected:
         virtual void archive(Archive& e) const {
             Choice::archive(e);
             // You must also archive the additional information
-            e << pos << intervalSplitPosition;
+            e << pos << obligatorySectionStart;
         }
     };
 public:
@@ -97,8 +97,8 @@ public:
     virtual bool status(const Space& home) const {
 		//MPG 32.2.2
 		for (int i = start; i < x.size(); i++) {
-			int split = x[i].min() + w[i] - ceil(p * w[i]);
-			if (!x[i].assigned() && split < x[i].max()) {
+			int obligatorySectionStart = x[i].min() + w[i] - ceil(p * w[i]);
+			if (!x[i].assigned() && obligatorySectionStart < x[i].max()) {
 				start = i;
 				return true;
 			}
@@ -107,17 +107,17 @@ public:
     }
     // Return choice as description
     virtual const Choice* choice(Space& home) {
-        int intervalSplitPosition = x[start].min() + w[start] - ceil(p * w[start]);
+        int obligatorySectionStart = x[start].min() + w[start] - ceil(p * w[start]);
 		// 2 because we always have only two branches there
-		return new Description(*this, 2, start, intervalSplitPosition);
+		return new Description(*this, 2, start, obligatorySectionStart);
         
     }
     // Construct choice from archive e
     virtual const Choice* choice(const Space&, Archive& e) {
         // Again, you have to take care of the additional information
-        int pos, intervalSplitPosition;
-        e >> pos >> intervalSplitPosition;
-        return new Description(*this, pos, p, intervalSplitPosition);
+        int pos, obligatorySectionStart;
+        e >> pos >> obligatorySectionStart;
+        return new Description(*this, pos, p, obligatorySectionStart);
     }
     // Perform commit for choice c and alternative a
     virtual ExecStatus commit(Space& home,
@@ -127,10 +127,10 @@ public:
         
 		//a == 0, go into the "left" branch
 		if (a == 0) {
-			return me_failed(x[d.pos].le(home, d.intervalSplitPosition)) ? ES_FAILED : ES_OK;
+			return me_failed(x[d.pos].le(home, d.obligatorySectionStart)) ? ES_FAILED : ES_OK;
 		}
 		else {
-			return me_failed(x[d.pos].gq(home, d.intervalSplitPosition)) ? ES_FAILED : ES_OK;
+			return me_failed(x[d.pos].gq(home, d.obligatorySectionStart)) ? ES_FAILED : ES_OK;
 		}
     }
     // Print some information on stream o (used by Gist, from Gecode 4.0.1 on)
@@ -139,10 +139,10 @@ public:
 
 		const Description& d = static_cast<const Description&>(c);
         if (b == 0) {
-			o << "x[" << d.pos << "] = {" << x[d.pos].min() << " ... " << d.intervalSplitPosition - 1 << "}";
+			o << "x[" << d.pos << "] = {" << x[d.pos].min() << " ... " << d.obligatorySectionStart - 1 << "}";
 		}
 		else {
-			o << "x[" << d.pos << "] = {" << d.intervalSplitPosition << " ... " << x[d.pos].max() << "}";
+			o << "x[" << d.pos << "] = {" << d.obligatorySectionStart << " ... " << x[d.pos].max() << "}";
 		}
         
     }
