@@ -333,6 +333,7 @@ public:
     }
 };
 
+/*
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
@@ -343,23 +344,16 @@ int main(int argc, char* argv[]) {
     
     //opt.model(SquarePacking::PROPAGATION_CUSTOM);
     
-    /*
-     
-     X: {0, 6, 6, 2, 0, 0}
-     Y:{0, 6, 0, 6, 6, 0}
-     S: 10
-     */
-    
- /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
     opt.branching(SquarePacking::BRANCHING_BIGGER_SQUARES_FIRST);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
     opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
     opt.branching(SquarePacking::BRANCHING_INTERVAL);
     opt.branching(SquarePacking::BRANCHING_RAND);
- */
+ 
     
     Script::run<SquarePacking, BAB, SizeOptions>(opt);
 
     return 0;
 }
+ */

@@ -10,6 +10,7 @@
 		311DDE341EBC8117008A0E9C /* square-packing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311DDE331EBC8117008A0E9C /* square-packing.cpp */; };
 		314AB8FA1E9766AB00A369B4 /* queensN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 314AB8F91E9766AB00A369B4 /* queensN.cpp */; };
 		316A17871ED8222A0029B1C1 /* intervall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 316A17861ED8222A0029B1C1 /* intervall.cpp */; };
+		316A17891ED8496F0029B1C1 /* life.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 316A17881ED8496F0029B1C1 /* life.cpp */; };
 		3177B4731EC0AAC600F13082 /* no-overlap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3177B4721EC0AAC600F13082 /* no-overlap.cpp */; };
 		31CF9C351E8A65350054C762 /* gecode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31CF9C341E8A65340054C762 /* gecode.framework */; };
 		31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CF9C361E8A65F00054C762 /* SendMoreMoney.cpp */; };
@@ -38,6 +39,7 @@
 		311DDE331EBC8117008A0E9C /* square-packing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "square-packing.cpp"; sourceTree = "<group>"; };
 		314AB8F91E9766AB00A369B4 /* queensN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queensN.cpp; sourceTree = "<group>"; };
 		316A17861ED8222A0029B1C1 /* intervall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = intervall.cpp; sourceTree = "<group>"; };
+		316A17881ED8496F0029B1C1 /* life.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = life.cpp; sourceTree = "<group>"; };
 		3177B4721EC0AAC600F13082 /* no-overlap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "no-overlap.cpp"; sourceTree = "<group>"; };
 		31CF9C271E8A629F0054C762 /* tmp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tmp; sourceTree = BUILT_PRODUCTS_DIR; };
 		31CF9C311E8A62E30054C762 /* gecode-5.0.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "gecode-5.0.0"; path = "../../../Downloads/gecode-5.0.0"; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				31F30C271E96901C00EC5A17 /* queens.cpp */,
 				311DDE331EBC8117008A0E9C /* square-packing.cpp */,
 				316A17861ED8222A0029B1C1 /* intervall.cpp */,
+				316A17881ED8496F0029B1C1 /* life.cpp */,
 			);
 			path = tmp;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 				31E28D671E9298340094FCA8 /* Sudoku.cpp in Sources */,
 				31CF9C381E8A65F00054C762 /* SendMoreMoney.cpp in Sources */,
 				311DDE341EBC8117008A0E9C /* square-packing.cpp in Sources */,
+				316A17891ED8496F0029B1C1 /* life.cpp in Sources */,
 				31E28D6C1E92A0B70094FCA8 /* A1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
