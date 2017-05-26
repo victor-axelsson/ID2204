@@ -58,16 +58,13 @@ class Life : public Script {
     }
         
     protected:
-
-   
-    IntVar aliveNodes;
+    
     IntVarArray board;
     int n;
     
     public:
 
         Life(const SizeOptions& opt): Script(opt), n(opt.size()),
-            aliveNodes(*this, 0, opt.size() * opt.size()),
             board(*this, (opt.size() + (DEAD_ROWS * 2)) * (opt.size() + (DEAD_ROWS * 2)), 0, 1){
 
 			//Outer rows and columns should stay dead
@@ -103,18 +100,22 @@ class Life : public Script {
 						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3));									     // if the cell is dead, it should not have 3 neighbours
 				}
 			}
-                
-            min(*this, board, aliveNodes);
 
+                LinIntExpr(sum(board)).post(*this, IPL_VAL);
+                
 			branch(*this, board, INT_VAR_NONE(), INT_VAL_MAX());
         }
     
         Life(bool share, Life& tmp) : Script(share, tmp) {
-            aliveNodes = tmp.aliveNodes;
             n = tmp.n;
             board = tmp.board; 
         }
-        
+    
+       virtual void constrain(const Space& b) {
+           const Life& life = static_cast<const Life&>(b);
+           rel(*this, sum(board) > sum(life.board));
+        }
+    
         virtual Space* copy(bool share) {
             return new Life(share, *this);
         }
@@ -122,15 +123,37 @@ class Life : public Script {
         //Print solution
         virtual void print(std::ostream& os) const {
             
+            int sum = 0;
+            for(int i = 0; i < n * n; i++){
+                
+                if(i % n == 0){
+                    os << endl;
+                }
+                
+                
+                if(board[i].assigned()){
+                    os << " " << board[i].val() << " ";
+                    sum += board[i].val();
+                }else{
+                    os << " ? ";
+                }
+            }
+            
+            os << "SUM: " << sum; 
+            
             printKitten();
-            os <<endl << "COUNT: " << aliveNodes.min() <<endl;
+            os <<endl << "COUNT: " << sum <<endl;
         
             for(int i = 0; i < n * n; i++){
                 if(i % n == 0){
                     os << endl;
                 }
             
-                os << " "  << board[i].min() << " ";
+                if(board[i].assigned()){
+                    os << " "  << board[i].min() << " ";
+                }else{
+                    os << " ? ";
+                }
             }
         }
     };
