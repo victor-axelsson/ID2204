@@ -148,6 +148,7 @@ public:
     }
 };
 
+/*
 // This posts the interval branching
 void interval(Home home, const IntVarArgs& x, const IntArgs& w, double p) {
     // Check whether arguments make sense
@@ -164,4 +165,4 @@ void interval(Home home, const IntVarArgs& x, const IntArgs& w, double p) {
     // Post the brancher
     IntervalBrancher::post(home,vx,wc,p);
 }
-
+*/

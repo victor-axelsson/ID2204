@@ -51,6 +51,23 @@ namespace CustomPropagator {
 	}
 }
 
+// This posts the interval branching
+void interval(Home home, const IntVarArgs& x, const IntArgs& w, double p) {
+    // Check whether arguments make sense
+    if (x.size() != w.size())
+        throw ArgumentSizeMismatch("interval");
+    // Never post a branching in a failed space
+    if (home.failed()) return;
+    // Create an array of integer views
+    ViewArray<IntView> vx(home,x);
+    // Create an array of integers
+    int* wc = static_cast<Space&>(home).alloc<int>(x.size());
+    for (int i=x.size(); i--; )
+        wc[i]=w[i];
+    // Post the brancher
+    IntervalBrancher::post(home,vx,wc,p);
+}
+
 //Just some colors for printing with ImageMagic and convert command
 static const string colors[] = {"red", "green", "silver", "blue", "yellow", "brown", "gray", "white"};
 
@@ -262,11 +279,12 @@ public:
             branch(*this, y, INT_VAR_RND(0), INT_VAL_MIN());
 		}
 		else if (opt.branching() == BRANCHING_INTERVAL) {
-			interval(*this, x, IntArgs::create(n - 1, n, -1), 0.2);
+            
+			interval(*this, x, IntArgs::create(n, n), 0.2);
+            interval(*this, y, IntArgs::create(n, n), 0.2);
 			branch(*this, x, INT_VAR_NONE(), INT_VAL_MIN());
-			interval(*this, y, IntArgs::create(n - 1, n, -1), 0.2);
-			branch(*this, y, INT_VAR_NONE(), INT_VAL_MIN());
-
+            branch(*this, y, INT_VAR_NONE(), INT_VAL_MIN());
+            
 		}
         
     }
@@ -320,9 +338,17 @@ int main(int argc, char* argv[]) {
     SizeOptions opt("SquarePacking");
     opt.size(6);
     opt.branching(SquarePacking::BRANCHING_INTERVAL);
+    //opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
     opt.model(SquarePacking::PROPAGATION_REIFIED);
+    
     //opt.model(SquarePacking::PROPAGATION_CUSTOM);
     
+    /*
+     
+     X: {0, 6, 6, 2, 0, 0}
+     Y:{0, 6, 0, 6, 6, 0}
+     S: 10
+     */
     
  /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
