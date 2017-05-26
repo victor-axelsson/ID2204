@@ -20,7 +20,7 @@ using namespace std;
 const int NR_OF_ITEMS = 6;
 const int DEAD_ROWS = 2;
 
-class Life : public IntMaximizeScript {
+class Life : public Script {
         
     private:
     
@@ -66,7 +66,7 @@ class Life : public IntMaximizeScript {
     
     public:
 
-        Life(const SizeOptions& opt): IntMaximizeScript(opt), n(opt.size()),
+        Life(const SizeOptions& opt): Script(opt), n(opt.size()),
             aliveNodes(*this, 0, opt.size() * opt.size()),
             board(*this, (opt.size() + (DEAD_ROWS * 2)) * (opt.size() + (DEAD_ROWS * 2)), 0, 1){
 
@@ -103,11 +103,13 @@ class Life : public IntMaximizeScript {
 						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3));									     // if the cell is dead, it should not have 3 neighbours
 				}
 			}
+                
+            min(*this, board, aliveNodes);
 
 			branch(*this, board, INT_VAR_NONE(), INT_VAL_MAX());
         }
     
-        Life(bool share, Life& tmp) : IntMaximizeScript(share, tmp) {
+        Life(bool share, Life& tmp) : Script(share, tmp) {
             aliveNodes = tmp.aliveNodes;
             n = tmp.n;
             board = tmp.board; 
@@ -117,19 +119,12 @@ class Life : public IntMaximizeScript {
             return new Life(share, *this);
         }
     
-        // cost function
-        virtual IntVar cost(void) const {
-            return aliveNodes;
-        }
-    
-    
         //Print solution
         virtual void print(std::ostream& os) const {
             
             printKitten();
             os <<endl << "COUNT: " << aliveNodes.min() <<endl;
-            
-
+        
             for(int i = 0; i < n * n; i++){
                 if(i % n == 0){
                     os << endl;
@@ -137,9 +132,6 @@ class Life : public IntMaximizeScript {
             
                 os << " "  << board[i].min() << " ";
             }
-            
-            
-                   // os << "  -fill "<< colors[i % 7] <<" -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
         }
     };
     
