@@ -6,6 +6,131 @@
 //  Copyright © 2017 simple_solutions. All rights reserved.
 //
 
+/*
+
+====================== Solutions for 8 without optimizations ======================
+
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  0  0  0
+0  0  1  1  1  1  1  1  0  0  0  0
+0  0  0  0  0  0  0  0  0  1  0  0
+0  0  1  1  0  1  1  0  1  1  0  0
+0  0  1  1  0  1  0  0  0  1  0  0
+0  0  0  0  0  0  1  1  1  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 34
+
+
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  0  0  0
+0  0  1  1  1  1  1  0  0  0  0  0
+0  0  0  0  0  0  0  1  1  0  0  0
+0  0  1  1  1  1  0  1  0  1  0  0
+0  0  1  0  0  1  0  1  0  1  0  0
+0  0  0  1  1  0  0  0  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 35
+
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  0  1  0  0
+0  0  1  1  1  1  1  1  1  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  0  0  0
+0  0  1  0  0  0  0  0  0  1  0  0
+0  0  0  1  1  1  1  1  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 37
+
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  0  0  0  0  1  0  0
+0  0  1  0  1  1  1  1  1  0  0  0
+0  0  1  0  1  0  0  0  0  0  0  0
+0  0  1  0  1  0  1  1  1  0  0  0
+0  0  1  0  1  1  0  1  0  1  0  0
+0  0  1  0  0  0  0  0  0  1  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 38
+
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  0  0  0  0  1  0  0
+0  0  1  0  1  1  1  1  0  1  0  0
+0  0  1  0  1  0  0  1  0  1  0  0
+0  0  1  0  1  0  0  1  0  1  0  0
+0  0  1  0  1  1  1  1  0  1  0  0
+0  0  1  0  0  0  0  0  0  1  0  0
+0  0  1  1  1  1  1  1  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 40
+
+====================== Solutions for 9 ======================
+
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  1  0  0  0
+0  0  1  1  1  1  1  1  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  0  0  0
+0  0  1  0  0  1  0  0  1  0  1  0  0
+0  0  1  0  0  0  0  0  0  0  1  0  0
+0  0  1  1  1  1  1  1  1  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 45
+
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  1  0  0  0
+0  0  1  1  1  1  1  0  1  0  0  0  0
+0  0  0  0  0  1  0  0  0  0  1  0  0
+0  0  1  1  0  0  0  1  1  1  1  0  0
+0  0  1  0  1  1  1  1  0  0  0  0  0
+0  0  1  0  0  0  0  0  0  1  1  0  0
+0  0  1  1  1  1  1  1  1  0  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 46
+
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  0  1  0  0
+0  0  1  1  1  1  1  1  0  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  1  1  1  1  1  1  1  1  1  0  0
+0  0  1  0  0  1  0  0  0  0  1  0  0
+0  0  1  0  0  0  0  1  1  0  1  0  0
+0  0  1  1  1  1  1  1  0  1  1  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0
+COUNT: 48
+
+
+*/
+
 #include <stdio.h>
 #include <gecode/int.hh>
 #include <gecode/search.hh>
@@ -61,11 +186,15 @@ class Life : public Script {
     
     IntVarArray board;
     int n;
+
+	//Optimization
+	IntVarArray squareSums;
     
     public:
 
         Life(const SizeOptions& opt): Script(opt), n(opt.size()),
-            board(*this, (opt.size() + (DEAD_ROWS * 2)) * (opt.size() + (DEAD_ROWS * 2)), 0, 1){
+            board(*this, (opt.size() + (DEAD_ROWS * 2)) * (opt.size() + (DEAD_ROWS * 2)), 0, 1),
+			squareSums(*this, ((opt.size() / 3) * (opt.size() / 3)), 0, 6) {
 
 			//Outer rows and columns should stay dead
 			int last = n + (DEAD_ROWS * 2) - 2;
@@ -82,6 +211,8 @@ class Life : public Script {
 			count(*this, boardAsMatrix.col(secondToLast), 1, IRT_EQ, 0);
 			count(*this, boardAsMatrix.col(last), 1, IRT_EQ, 0);
             
+			int tmpInd = 0;
+
 			for (int i = DEAD_ROWS; i < n + DEAD_ROWS; i++) {
 				for (int j = DEAD_ROWS; j < n + DEAD_ROWS; j++) {
 					//By rules of the game we need still life, so dead cells should be constrained to stay dead,
@@ -98,6 +229,12 @@ class Life : public Script {
 
 					rel(*this, (boardAsMatrix(i, j) == 1 && (sum(neighbourCells) == 2 || sum(neighbourCells) == 3)) || // if the cell is alive, it should stay alive, so 2 or 3 neighbours alive
 						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3));									     // if the cell is dead, it should not have 3 neighbours
+
+					//Each 3x3 square can have max 6 live cells. tmpInd keeps track of which square we are in now
+					if (i % 3 == 2 && j % 3 == 2 && i < n && j < n) {
+						rel(*this, squareSums[tmpInd] == sum(boardAsMatrix.slice(i, i + 3, j, j + 3)));
+						tmpInd += 1;
+					}
 				}
 			}
 
@@ -109,6 +246,7 @@ class Life : public Script {
         Life(bool share, Life& tmp) : Script(share, tmp) {
             n = tmp.n;
 			board.update(*this, share, tmp.board);
+			squareSums.update(*this, share, tmp.squareSums);
         }
     
        virtual void constrain(const Space& b) {
