@@ -16,6 +16,7 @@
 #include <string>
 
 
+#include "intervall.cpp"
 #include "no-overlap.cpp"
 
 using namespace Gecode;
@@ -128,6 +129,7 @@ public:
         BRANCHING_BIGGER_SQUARES_FIRST,
         BRANCHING_LEFT_TO_RIGHT,
         BRANCHING_TOP_TO_BOTTOM,
+		BRANCHING_INTERVAL,
         BRANCHING_RAND
     };
     
@@ -258,7 +260,14 @@ public:
         }else if(opt.branching() == BRANCHING_RAND){
             branch(*this, x, INT_VAR_RND(0), INT_VAL_MIN());
             branch(*this, y, INT_VAR_RND(0), INT_VAL_MIN());
-        }
+		}
+		else if (opt.branching() == BRANCHING_INTERVAL) {
+			interval(*this, x, IntArgs::create(n - 1, n, -1), 0.2);
+			branch(*this, x, INT_VAR_NONE(), INT_VAL_MIN());
+			interval(*this, y, IntArgs::create(n - 1, n, -1), 0.2);
+			branch(*this, y, INT_VAR_NONE(), INT_VAL_MIN());
+
+		}
         
     }
     
@@ -306,26 +315,25 @@ public:
     }
 };
 
-/*
 int main(int argc, char* argv[]) {
     
     SizeOptions opt("SquarePacking");
     opt.size(6);
-    opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
+    opt.branching(SquarePacking::BRANCHING_INTERVAL);
     opt.model(SquarePacking::PROPAGATION_REIFIED);
     //opt.model(SquarePacking::PROPAGATION_CUSTOM);
     
     
- 
+ /*
     opt.branching(SquarePacking::BRANCHING_ASSIGN_X_THEN_Y);
     opt.branching(SquarePacking::BRANCHING_BIGGER_SQUARES_FIRST);
     opt.branching(SquarePacking::BRANCHING_LEFT_TO_RIGHT);
     opt.branching(SquarePacking::BRANCHING_TOP_TO_BOTTOM);
-     opt.branching(SquarePacking::BRANCHING_RAND);
- 
+    opt.branching(SquarePacking::BRANCHING_INTERVAL);
+    opt.branching(SquarePacking::BRANCHING_RAND);
+ */
     
     Script::run<SquarePacking, BAB, SizeOptions>(opt);
 
     return 0;
 }
- */
