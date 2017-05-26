@@ -27,7 +27,7 @@ class Life : public IntMaximizeScript {
     void printKitten() const {
         
         string s = "";
-        s += "                                 .--. \n";
+        s += "                                            .--. \n";
         s += "                                             `.  \\ \n";
         s += "                                               \\  \\ \n";
         s += "                                                .  \\ \n";
@@ -38,7 +38,7 @@ class Life : public IntMaximizeScript {
         s += "  ..._  ___                                     |    | \n";
         s += " `.\"\".`''''\"\"--..___                            |    | \n";
         s += " ,-\\  \\             ""-...__         _____________/    | \n";
-        s += " / ` \" '                 `\"\"\"\"\"\"\"\"                    . \n";
+        s += " / ` \" '                  `\"\"\"\"\"\"\"\"                   . \n";
         s += " \\                                                     L \n";
         s += " (>                                                      \\ \n";
         s += "/                                                         \\ \n";
@@ -85,6 +85,26 @@ class Life : public IntMaximizeScript {
 			count(*this, boardAsMatrix.col(secondToLast), 1, IRT_EQ, 0);
 			count(*this, boardAsMatrix.col(last), 1, IRT_EQ, 0);
             
+			for (int i = DEAD_ROWS; i < opt.size() + DEAD_ROWS; i++) {
+				for (int j = DEAD_ROWS; j < opt.size() + DEAD_ROWS; j++) {
+					//By rules of the game we need still life, so dead cells should be constrained to stay dead,
+					//while living cells should not die. Here we take all of the neighbours of the cell and do the proper checks using sums
+					IntVarArray neighbourCells(*this, 8, 0, 1);
+					neighbourCells[0] = boardAsMatrix(i - 1, j - 1);   
+					neighbourCells[1] = boardAsMatrix(i + 1, j - 1);   
+					neighbourCells[2] = boardAsMatrix(i, j - 1);      
+					neighbourCells[3] = boardAsMatrix(i - 1, j + 1);  
+					neighbourCells[4] = boardAsMatrix(i, j + 1);       
+					neighbourCells[5] = boardAsMatrix(i + 1, j + 1);   
+					neighbourCells[6] = boardAsMatrix(i - 1, j);    
+					neighbourCells[7] = boardAsMatrix(i + 1, j);       
+			
+					rel(*this, ((boardAsMatrix(i, j) == 1 && (sum(neighbourCells) == 2 || sum(neighbourCells) == 3))) || // if the cell is alive, it should stay alive, so 2 or 3 neighbours alive
+						(boardAsMatrix(i, j) == 0 && sum(neighbourCells) != 3));									     // if the cell is dead, it should not have 3 neighbours
+				}
+			}
+
+			branch(*this, board, INT_VAR_NONE(), INT_VAL_MAX());
         }
     
         Life(bool share, Life& tmp) : IntMaximizeScript(share, tmp) {
