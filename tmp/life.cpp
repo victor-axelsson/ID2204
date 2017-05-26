@@ -34,10 +34,25 @@ class Life : public IntMaximizeScript {
 
         Life(const SizeOptions& opt): IntMaximizeScript(opt), n(opt.size()),
             aliveNodes(*this, 0, opt.size() * opt.size()),
-            board(*this, opt.size() + (DEAD_ROWS * 2) * (DEAD_ROWS * 2), 0, 1){
+            board(*this, (opt.size() + (DEAD_ROWS * 2)) * (opt.size() + (DEAD_ROWS * 2)), 0, 1){
 
-                
+			//Outer rows and columns should stay dead
+			int last = opt.size() + (DEAD_ROWS * 2) - 2;
+			int secondToLast = opt.size() + (DEAD_ROWS * 2) - 1;
+
+			Matrix<IntVarArray> boardAsMatrix(board, (opt.size() + (DEAD_ROWS * 2)), (opt.size() + (DEAD_ROWS * 2)));
+			count(*this, boardAsMatrix.row(0), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.row(1), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.row(secondToLast), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.row(last), 1, IRT_EQ, 0);
+
+			count(*this, boardAsMatrix.col(0), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.col(1), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.col(secondToLast), 1, IRT_EQ, 0);
+			count(*this, boardAsMatrix.col(last), 1, IRT_EQ, 0);
             
+
+
             std::cout << "In ctor. N:" << n;
             
         }
