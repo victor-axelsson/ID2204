@@ -51,13 +51,14 @@ protected:
     public:
         // Position of view
         int pos;
-        // You might need more information, please add here
+        // Position of interval split
+		int intervalSplitPosition;
         
         /* Initialize description for brancher b, number of
          *  alternatives a, position p, and ???.
          */
-        Description(const Brancher& b, unsigned int a, int p)
-        : Choice(b,a), pos(p) {}
+        Description(const Brancher& b, unsigned int a, int p, int split)
+        : Choice(b,a), pos(p), intervalSplitPosition(split) {}
         // Report size occupied
         virtual size_t size(void) const {
             return sizeof(Description);
@@ -66,7 +67,7 @@ protected:
         virtual void archive(Archive& e) const {
             Choice::archive(e);
             // You must also archive the additional information
-            e << pos << ...;
+            e << pos << intervalSplitPosition;
         }
     };
 public:
@@ -94,22 +95,29 @@ public:
     
     // Check status of brancher, return true if alternatives left
     virtual bool status(const Space& home) const {
-        
-        // FILL IN HERE
-        
+		//MPG 32.2.2
+		for (int i = start; i < x.size(); i++) {
+			int split = x[i].min() + w[i] - ceil(p * w[i]);
+			if (!x[i].assigned() && split < x[i].max()) {
+				start = i;
+				return true;
+			}
+		}
+		return false;
     }
     // Return choice as description
     virtual const Choice* choice(Space& home) {
-        
-        // FILL IN HERE
+        int intervalSplitPosition = x[start].min() + w[start] - ceil(p * w[start]);
+		// 2 because we always have only two branches there
+		return new Description(*this, 2, start, intervalSplitPosition);
         
     }
     // Construct choice from archive e
     virtual const Choice* choice(const Space&, Archive& e) {
         // Again, you have to take care of the additional information
-        int pos, ...;
-        e >> pos >> ...;
-        return new Description(*this, pos, ...);
+        int pos, intervalSplitPosition;
+        e >> pos >> intervalSplitPosition;
+        return new Description(*this, pos, p, intervalSplitPosition);
     }
     // Perform commit for choice c and alternative a
     virtual ExecStatus commit(Space& home,
@@ -117,14 +125,25 @@ public:
                               unsigned int a) {
         const Description& d = static_cast<const Description&>(c);
         
-        // FILL IN HERE
-        
+		//a == 0, go into the "left" branch
+		if (a == 0) {
+			return me_failed(x[d.pos].le(home, d.intervalSplitPosition)) ? ES_FAILED : ES_OK;
+		}
+		else {
+			return me_failed(x[d.pos].gq(home, d.intervalSplitPosition)) ? ES_FAILED : ES_OK;
+		}
     }
     // Print some information on stream o (used by Gist, from Gecode 4.0.1 on)
     virtual void print(const Space& home, const Choice& c, unsigned int b,
                        std::ostream& o) const {
-        
-        // FILL IN HERE
+
+		const Description& d = static_cast<const Description&>(c);
+        if (b == 0) {
+			o << "x[" << d.pos << "] = {" << x[d.pos].min() << " ... " << d.intervalSplitPosition - 1 << "}";
+		}
+		else {
+			o << "x[" << d.pos << "] = {" << d.intervalSplitPosition << " ... " << x[d.pos].max() << "}";
+		}
         
     }
 };
