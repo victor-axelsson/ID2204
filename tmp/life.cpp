@@ -45,6 +45,7 @@ class Life : public IntMaximizeScript {
         Life(bool share, Life& tmp) : IntMaximizeScript(share, tmp) {
             aliveNodes = tmp.aliveNodes;
             n = tmp.n;
+            board = tmp.board; 
         }
         
         virtual Space* copy(bool share) {
@@ -59,6 +60,16 @@ class Life : public IntMaximizeScript {
     
         //Print solution
         virtual void print(std::ostream& os) const {
+            
+            for(int i = 0; i < n * n; i++){
+                if(i % n == 0){
+                    os << endl;
+                }
+            
+                os << " "  << board[i].min() << " ";
+                //os << " 0 ";
+            }
+            
             
                    // os << "  -fill "<< colors[i % 7] <<" -draw \" rectangle " << x1 << "," << y1 <<" " << x2 <<"," << y2  << "\" ";
         }
